@@ -6,12 +6,14 @@ import { MapFactory } from "../../core/module";
 })
 export class Map {
   @Element() private element: HTMLElement;
-  @Prop() map: Object;
+  @Prop() map: any;
   @Prop() config: Object;
 
   componentWillLoad() {}
   componentDidLoad() {
     this.map = MapFactory.getOne({ target: this.element });
+    const control = this.map["controls"].createControl("TextControl");
+    control.addTo(this.map.instance);
   }
 
   render() {
