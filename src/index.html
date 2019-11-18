@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
   <title>Stencil Component Starter</title>
 
-  <script type="module" src="/build/stencil-starter-project-name.esm.js"></script>
-  <script nomodule src="/build/stencil-starter-project-name.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin="" />
+  <script type="module" src="/build/pwc-leaflet-text.esm.js"></script>
+  <script nomodule src="/build/pwc-leaflet-text.js"></script>
 
 </head>
+
 <body>
 
-  <my-component first="Stencil" last="'Don't call me a framework' JS"></my-component>
+  <pwc-leaflet-text config="Stencil"></pwc-leaflet-text>
 
 </body>
+
 </html>

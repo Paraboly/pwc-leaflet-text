@@ -10,53 +10,33 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
-  interface MyComponent {
-    /**
-    * The first name
-    */
-    'first': string;
-    /**
-    * The last name
-    */
-    'last': string;
-    /**
-    * The middle name
-    */
-    'middle': string;
+  interface PwcLeafletText {
+    'config': Object;
+    'map': Object;
   }
 }
 
 declare global {
 
 
-  interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {}
-  var HTMLMyComponentElement: {
-    prototype: HTMLMyComponentElement;
-    new (): HTMLMyComponentElement;
+  interface HTMLPwcLeafletTextElement extends Components.PwcLeafletText, HTMLStencilElement {}
+  var HTMLPwcLeafletTextElement: {
+    prototype: HTMLPwcLeafletTextElement;
+    new (): HTMLPwcLeafletTextElement;
   };
   interface HTMLElementTagNameMap {
-    'my-component': HTMLMyComponentElement;
+    'pwc-leaflet-text': HTMLPwcLeafletTextElement;
   }
 }
 
 declare namespace LocalJSX {
-  interface MyComponent {
-    /**
-    * The first name
-    */
-    'first'?: string;
-    /**
-    * The last name
-    */
-    'last'?: string;
-    /**
-    * The middle name
-    */
-    'middle'?: string;
+  interface PwcLeafletText {
+    'config'?: Object;
+    'map'?: Object;
   }
 
   interface IntrinsicElements {
-    'my-component': MyComponent;
+    'pwc-leaflet-text': PwcLeafletText;
   }
 }
 
@@ -66,7 +46,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
   export namespace JSX {
     interface IntrinsicElements {
-      'my-component': LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+      'pwc-leaflet-text': LocalJSX.PwcLeafletText & JSXBase.HTMLAttributes<HTMLPwcLeafletTextElement>;
     }
   }
 }
