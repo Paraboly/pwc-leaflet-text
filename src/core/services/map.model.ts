@@ -2,8 +2,16 @@ import PWA_MAP_CONSTANTS from "../constants";
 import "../sources/leaflet/leaflet.service";
 import { MapControlService } from "./map-control";
 
+/**
+ *
+ * @description
+ * @class PWCMap
+ */
 export default class PWCMap {
-  instance;
+  instance: L.Map;
+  controls: {
+    create: (controlName: string, config?) => L.Control;
+  };
   settings = {
     source: PWA_MAP_CONSTANTS.SOURCES.LEAFLET,
     target: PWA_MAP_CONSTANTS.DEFAULTS.TARGET,
@@ -22,6 +30,11 @@ export default class PWCMap {
 
   initialize() {
     this.instance = this.settings.source.getOne(this.settings);
-    this["controls"] = MapControlService;
+    /**
+     * Register control methods
+     */
+    this.controls = {
+      create: MapControlService.createControl
+    };
   }
 }

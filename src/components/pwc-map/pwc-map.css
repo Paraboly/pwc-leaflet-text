@@ -1,0 +1,7 @@
+@import url("https://unpkg.com/leaflet@1.5.1/dist/leaflet.css");
+
+.pwc-map-container {
+  display: block;
+  height: 100%;
+  width: 100%;
+}

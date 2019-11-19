@@ -10,33 +10,69 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
-  interface PwcLeafletText {
+  interface PwcMap {
+    /**
+    * Config for the map to be initialized
+    */
     'config': Object;
-    'map': Object;
+    /**
+    * @description Allow to get map instance from pwc-map element
+    * @returns the map instance
+    * @memberof PwcMap
+    */
+    'getMap': () => Promise<PwcMap>;
+  }
+  interface PwcMapControls {}
+  interface PwcTextControl {
+    'config': Object;
+    'map': any;
   }
 }
 
 declare global {
 
 
-  interface HTMLPwcLeafletTextElement extends Components.PwcLeafletText, HTMLStencilElement {}
-  var HTMLPwcLeafletTextElement: {
-    prototype: HTMLPwcLeafletTextElement;
-    new (): HTMLPwcLeafletTextElement;
+  interface HTMLPwcMapElement extends Components.PwcMap, HTMLStencilElement {}
+  var HTMLPwcMapElement: {
+    prototype: HTMLPwcMapElement;
+    new (): HTMLPwcMapElement;
+  };
+
+  interface HTMLPwcMapControlsElement extends Components.PwcMapControls, HTMLStencilElement {}
+  var HTMLPwcMapControlsElement: {
+    prototype: HTMLPwcMapControlsElement;
+    new (): HTMLPwcMapControlsElement;
+  };
+
+  interface HTMLPwcTextControlElement extends Components.PwcTextControl, HTMLStencilElement {}
+  var HTMLPwcTextControlElement: {
+    prototype: HTMLPwcTextControlElement;
+    new (): HTMLPwcTextControlElement;
   };
   interface HTMLElementTagNameMap {
-    'pwc-leaflet-text': HTMLPwcLeafletTextElement;
+    'pwc-map': HTMLPwcMapElement;
+    'pwc-map-controls': HTMLPwcMapControlsElement;
+    'pwc-text-control': HTMLPwcTextControlElement;
   }
 }
 
 declare namespace LocalJSX {
-  interface PwcLeafletText {
+  interface PwcMap {
+    /**
+    * Config for the map to be initialized
+    */
     'config'?: Object;
-    'map'?: Object;
+  }
+  interface PwcMapControls {}
+  interface PwcTextControl {
+    'config'?: Object;
+    'map'?: any;
   }
 
   interface IntrinsicElements {
-    'pwc-leaflet-text': PwcLeafletText;
+    'pwc-map': PwcMap;
+    'pwc-map-controls': PwcMapControls;
+    'pwc-text-control': PwcTextControl;
   }
 }
 
@@ -46,7 +82,9 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
   export namespace JSX {
     interface IntrinsicElements {
-      'pwc-leaflet-text': LocalJSX.PwcLeafletText & JSXBase.HTMLAttributes<HTMLPwcLeafletTextElement>;
+      'pwc-map': LocalJSX.PwcMap & JSXBase.HTMLAttributes<HTMLPwcMapElement>;
+      'pwc-map-controls': LocalJSX.PwcMapControls & JSXBase.HTMLAttributes<HTMLPwcMapControlsElement>;
+      'pwc-text-control': LocalJSX.PwcTextControl & JSXBase.HTMLAttributes<HTMLPwcTextControlElement>;
     }
   }
 }

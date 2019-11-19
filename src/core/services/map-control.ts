@@ -13,7 +13,6 @@ export abstract class MapControlService {
     controlName: string,
     config = { position: "topleft" }
   ): L.Control {
-    const self = this;
     const control = L.Control.extend({
       onAdd: function() {
         const container = L.DomUtil.create(
@@ -22,7 +21,7 @@ export abstract class MapControlService {
         );
         container.innerHTML = `<pwc-tooltip tooltip-alignment="right" tooltip-text="Etiket Ekle" tooltip-source="https://www.svgrepo.com/show/14960/text-box.svg" style="display: block;margin-left:-1px;margin-top: -1px;"></pwc-tooltip>`;
 
-        Object.assign(container.style, self.getControlStyle());
+        Object.assign(container.style, MapControlService.getControlStyle());
 
         return container;
       },
@@ -32,11 +31,11 @@ export abstract class MapControlService {
       }
     });
 
-    L.control[controlName] = function(opts) {
+    L.Control[controlName] = function(opts) {
       return new control(opts);
     };
 
-    return L.control[controlName]({ position: config.position });
+    return new L.Control[controlName]({ position: config.position });
   }
 
   public static getControlStyle(customStyle?) {
