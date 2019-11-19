@@ -1,6 +1,6 @@
-import { Component, h, Element } from "@stencil/core";
+import { Component, h, Element, Method } from "@stencil/core";
 import L from "leaflet";
-import PWCMap from "../../core/services/map.model";
+import PWCMap from "../../core/models/pwc-map.model";
 
 @Component({
   tag: "pwc-map-controls",
@@ -42,18 +42,27 @@ export class PwcMapControls {
    * @private
    * @memberof PwcMapControls
    */
-  private registerControls() {
+  public registerControls() {
     this.controlsGroup.push(this.map.controls.create("TextControl"));
     this.controlsGroup.push(L.control.scale());
-    this.controlsGroup.push(L.control.attribution());
   }
 
-  private removeControlsFromMap() {
+  public removeControlsFromMap() {
     this.controlsGroup.map(control => this.map.instance.removeControl(control));
   }
 
   private addControlsToMap() {
     this.controlsGroup.map(control => control.addTo(this.map.instance));
+  }
+
+  /**
+   * @description Get registered controls
+   * @returns {Promise<Array<L.Control>>} List of registered controls
+   * @memberof PwcMapControls
+   */
+  @Method()
+  async getControls(): Promise<any> {
+    return Promise.resolve(this.controlsGroup);
   }
 
   render() {

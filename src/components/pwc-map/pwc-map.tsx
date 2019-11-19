@@ -1,6 +1,6 @@
 import { Element, Component, Prop, h, Method } from "@stencil/core";
 import { MapFactory } from "../../core/module";
-import PWCMap from "../../../dist/collection/core/services/map.model";
+import PWCMap from "../../core/models/pwc-map.model";
 
 @Component({
   tag: "pwc-map",

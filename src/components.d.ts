@@ -22,8 +22,15 @@ export namespace Components {
     */
     'getMap': () => Promise<PwcMap>;
   }
-  interface PwcMapControls {}
-  interface PwcTextControl {
+  interface PwcMapControls {
+    /**
+    * @description Get registered controls
+    * @returns List of registered controls
+    * @memberof PwcMapControls
+    */
+    'getControls': () => Promise<any>;
+  }
+  interface PwcMapTextControl {
     'config': Object;
     'map': any;
   }
@@ -44,15 +51,15 @@ declare global {
     new (): HTMLPwcMapControlsElement;
   };
 
-  interface HTMLPwcTextControlElement extends Components.PwcTextControl, HTMLStencilElement {}
-  var HTMLPwcTextControlElement: {
-    prototype: HTMLPwcTextControlElement;
-    new (): HTMLPwcTextControlElement;
+  interface HTMLPwcMapTextControlElement extends Components.PwcMapTextControl, HTMLStencilElement {}
+  var HTMLPwcMapTextControlElement: {
+    prototype: HTMLPwcMapTextControlElement;
+    new (): HTMLPwcMapTextControlElement;
   };
   interface HTMLElementTagNameMap {
     'pwc-map': HTMLPwcMapElement;
     'pwc-map-controls': HTMLPwcMapControlsElement;
-    'pwc-text-control': HTMLPwcTextControlElement;
+    'pwc-map-text-control': HTMLPwcMapTextControlElement;
   }
 }
 
@@ -64,7 +71,7 @@ declare namespace LocalJSX {
     'config'?: Object;
   }
   interface PwcMapControls {}
-  interface PwcTextControl {
+  interface PwcMapTextControl {
     'config'?: Object;
     'map'?: any;
   }
@@ -72,7 +79,7 @@ declare namespace LocalJSX {
   interface IntrinsicElements {
     'pwc-map': PwcMap;
     'pwc-map-controls': PwcMapControls;
-    'pwc-text-control': PwcTextControl;
+    'pwc-map-text-control': PwcMapTextControl;
   }
 }
 
@@ -84,7 +91,7 @@ declare module "@stencil/core" {
     interface IntrinsicElements {
       'pwc-map': LocalJSX.PwcMap & JSXBase.HTMLAttributes<HTMLPwcMapElement>;
       'pwc-map-controls': LocalJSX.PwcMapControls & JSXBase.HTMLAttributes<HTMLPwcMapControlsElement>;
-      'pwc-text-control': LocalJSX.PwcTextControl & JSXBase.HTMLAttributes<HTMLPwcTextControlElement>;
+      'pwc-map-text-control': LocalJSX.PwcMapTextControl & JSXBase.HTMLAttributes<HTMLPwcMapTextControlElement>;
     }
   }
 }

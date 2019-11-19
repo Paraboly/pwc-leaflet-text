@@ -1,6 +1,6 @@
 import PWA_MAP_CONSTANTS from "../constants";
 import "../sources/leaflet/leaflet.service";
-import { MapControlService } from "./map-control";
+import { MapControlService } from "../services/map-control";
 
 /**
  *
