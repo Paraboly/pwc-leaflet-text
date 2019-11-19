@@ -9,7 +9,15 @@ export abstract class PWCMapControlsService {
    * @returns new custom control instance
    * @memberof PWCMapControlsService
    */
-  public static createControl(controlName: string, config: {}): L.Control {
+  public static createControl(
+    controlName: string,
+    config: {
+      template: string;
+      position?: string;
+      icon?: string;
+      tooltipText?: string;
+    }
+  ): L.Control {
     const cfg = Object.assign(config, { position: "topleft" });
 
     const control = L.Control.extend({
@@ -18,9 +26,8 @@ export abstract class PWCMapControlsService {
           "div",
           "leaflet-bar leaflet-control leaflet-control-label"
         );
-        container.innerHTML = `<pwc-tooltip tooltip-alignment="right" tooltip-text="Etiket Ekle" tooltip-source="https://www.svgrepo.com/show/14960/text-box.svg" style="display: block;margin-left:-1px;margin-top: -1px;"></pwc-tooltip>`;
 
-        Object.assign(container.style, PWCMapControlsService.getControlStyle());
+        container.innerHTML = `<pwc-tooltip tooltip-alignment="right" tooltip-text="${cfg.tooltipText}" tooltip-source="${cfg.icon}"></pwc-tooltip>${cfg.template}`;
 
         return container;
       },
@@ -35,20 +42,5 @@ export abstract class PWCMapControlsService {
     };
 
     return new L.Control[controlName]({ position: cfg.position });
-  }
-
-  public static getControlStyle(customStyle?) {
-    const defaultStyle = {
-      backgroundColor: "white",
-      width: "26px",
-      height: "26px",
-      boxSizing: "border-box",
-      border: "4px solid transparent",
-      cursor: "pointer"
-    };
-
-    Object.assign(defaultStyle, customStyle);
-
-    return defaultStyle;
   }
 }

@@ -1,6 +1,7 @@
 import { Component, h, Element, Method } from "@stencil/core";
 import L from "leaflet";
 import PWCMap from "../pwc-map/services/pwc-map.model";
+import PWC_MAP_CONTROLS_CONSTANT from "./pwc-map-controls.constant";
 
 @Component({
   tag: "pwc-map-controls",
@@ -43,18 +44,41 @@ export class PwcMapControls {
    * @memberof PwcMapControls
    */
   private registerControls() {
-    this.controlsGroup.push(
-      this.map.controls.create("TextControl", {
-        template: "<pwc-map-text-control></pwc-map-text-control>"
-      })
-    );
+    /**
+     * For each default custom control
+     */
+    PWC_MAP_CONTROLS_CONSTANT.DEFAULT_CUSTOM_CONTROLS.map(controlName => {
+      /**
+       * Get default custom control config
+       */
+      const controlConfig =
+        PWC_MAP_CONTROLS_CONSTANT.CONTROL_CONFIGS[controlName];
+
+      /**
+       * Create custom control and push to controlsGroup
+       */
+      this.controlsGroup.push(
+        this.map.controls.create(controlName, controlConfig)
+      );
+    });
+    /**
+     * Register native controls
+     */
     this.controlsGroup.push(L.control.scale());
   }
 
+  /**
+   * @description Remove all registered controls from map
+   * @memberof PwcMapControls
+   */
   public removeControlsFromMap() {
     this.controlsGroup.map(control => this.map.instance.removeControl(control));
   }
 
+  /**
+   * @description Add all registered controls to map
+   * @memberof PwcMapControls
+   */
   public addControlsToMap() {
     this.controlsGroup.map(control => control.addTo(this.map.instance));
   }

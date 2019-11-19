@@ -5,3 +5,25 @@
   height: 100%;
   width: 100%;
 }
+
+.pwc-map-container .leaflet-control {
+  background-color: #ffffff;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  display: block;
+  cursor: pointer;
+  width: 26px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.pwc-map-container .leaflet-control:active {
+  bottom: -1px;
+  background-color: #ddd;
+}
+
+.pwc-map-container .leaflet-control pwc-tooltip {
+  display: block;
+  border-top: 3px solid transparent;
+  line-height: 13px;
+}

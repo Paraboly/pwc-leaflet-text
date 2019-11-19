@@ -9,11 +9,9 @@ export class Map {
   @Prop() map: any;
   @Prop() config: Object;
 
-  componentDidLoad() {
-    alert("Hello world");
-  }
+  componentDidLoad() {}
 
   render() {
-    return <div>Hello It is pwc-map-text-control</div>;
+    return;
   }
 }
