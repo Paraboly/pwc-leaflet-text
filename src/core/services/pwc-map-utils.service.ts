@@ -1,4 +1,4 @@
-export abstract class MapService {
+export abstract class PWCMapUtils {
   public static flyTo(map, location, callback) {
     return {
       map,

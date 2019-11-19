@@ -1,6 +1,6 @@
 import LEAFLET from "./sources/leaflet/leaflet.service";
 
-const PWA_MAP_CONSTANTS = {
+const PWC_MAP_CONSTANTS = {
   DEFAULTS: {
     TARGET: "pwc-map",
     CENTER: [39.8974598, 32.7758598],
@@ -16,4 +16,4 @@ const PWA_MAP_CONSTANTS = {
   }
 };
 
-export default PWA_MAP_CONSTANTS;
+export default PWC_MAP_CONSTANTS;

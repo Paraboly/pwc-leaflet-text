@@ -1,6 +1,6 @@
 import { Component, h, Element, Method } from "@stencil/core";
 import L from "leaflet";
-import PWCMap from "../../core/models/pwc-map.model";
+import PWCMap from "../pwc-map/services/pwc-map.model";
 
 @Component({
   tag: "pwc-map-controls",
@@ -42,8 +42,12 @@ export class PwcMapControls {
    * @private
    * @memberof PwcMapControls
    */
-  public registerControls() {
-    this.controlsGroup.push(this.map.controls.create("TextControl"));
+  private registerControls() {
+    this.controlsGroup.push(
+      this.map.controls.create("TextControl", {
+        template: "<pwc-map-text-control></pwc-map-text-control>"
+      })
+    );
     this.controlsGroup.push(L.control.scale());
   }
 
@@ -51,7 +55,7 @@ export class PwcMapControls {
     this.controlsGroup.map(control => this.map.instance.removeControl(control));
   }
 
-  private addControlsToMap() {
+  public addControlsToMap() {
     this.controlsGroup.map(control => control.addTo(this.map.instance));
   }
 

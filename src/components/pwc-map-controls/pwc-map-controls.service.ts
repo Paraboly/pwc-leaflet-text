@@ -1,18 +1,17 @@
 import L from "leaflet";
-export abstract class MapControlService {
+export abstract class PWCMapControlsService {
   /**
    * @static
    * @description Given parameters, custom control will be created and control instance will be returned
-   * @example MapControlService.createControl("exampleControl").addTo(map)
+   * @example PWCMapControlsService.createControl("exampleControl").addTo(map)
    * @param {string} controlName of the custom control to be created
    * @param {Object} config for the control
    * @returns new custom control instance
-   * @memberof MapControlService
+   * @memberof PWCMapControlsService
    */
-  public static createControl(
-    controlName: string,
-    config = { position: "topleft" }
-  ): L.Control {
+  public static createControl(controlName: string, config: {}): L.Control {
+    const cfg = Object.assign(config, { position: "topleft" });
+
     const control = L.Control.extend({
       onAdd: function() {
         const container = L.DomUtil.create(
@@ -21,7 +20,7 @@ export abstract class MapControlService {
         );
         container.innerHTML = `<pwc-tooltip tooltip-alignment="right" tooltip-text="Etiket Ekle" tooltip-source="https://www.svgrepo.com/show/14960/text-box.svg" style="display: block;margin-left:-1px;margin-top: -1px;"></pwc-tooltip>`;
 
-        Object.assign(container.style, MapControlService.getControlStyle());
+        Object.assign(container.style, PWCMapControlsService.getControlStyle());
 
         return container;
       },
@@ -35,7 +34,7 @@ export abstract class MapControlService {
       return new control(opts);
     };
 
-    return new L.Control[controlName]({ position: config.position });
+    return new L.Control[controlName]({ position: cfg.position });
   }
 
   public static getControlStyle(customStyle?) {

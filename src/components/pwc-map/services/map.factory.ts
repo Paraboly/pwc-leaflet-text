@@ -1,4 +1,4 @@
-import PWCMap from "../models/pwc-map.model";
+import PWCMap from "./pwc-map.model";
 
 export class MapFactory {
   /**

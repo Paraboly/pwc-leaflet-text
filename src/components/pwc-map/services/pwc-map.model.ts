@@ -1,6 +1,5 @@
-import PWA_MAP_CONSTANTS from "../constants";
-import "../sources/leaflet/leaflet.service";
-import { MapControlService } from "../services/map-control";
+import PWC_MAP_CONSTANTS from "../../../core/constants";
+import { PWCMapControlsService } from "../../pwc-map-controls/pwc-map-controls.service";
 
 /**
  *
@@ -13,13 +12,13 @@ export default class PWCMap {
     create: (controlName: string, config?) => L.Control;
   };
   settings = {
-    source: PWA_MAP_CONSTANTS.SOURCES.LEAFLET,
-    target: PWA_MAP_CONSTANTS.DEFAULTS.TARGET,
-    center: PWA_MAP_CONSTANTS.DEFAULTS.CENTER,
-    zoom: PWA_MAP_CONSTANTS.DEFAULTS.ZOOM,
-    maxZoom: PWA_MAP_CONSTANTS.DEFAULTS.MAX_ZOOM,
+    source: PWC_MAP_CONSTANTS.SOURCES.LEAFLET,
+    target: PWC_MAP_CONSTANTS.DEFAULTS.TARGET,
+    center: PWC_MAP_CONSTANTS.DEFAULTS.CENTER,
+    zoom: PWC_MAP_CONSTANTS.DEFAULTS.ZOOM,
+    maxZoom: PWC_MAP_CONSTANTS.DEFAULTS.MAX_ZOOM,
     layer: {
-      url: PWA_MAP_CONSTANTS.DEFAULTS.BASE_LAYER.URL
+      url: PWC_MAP_CONSTANTS.DEFAULTS.BASE_LAYER.URL
     }
   };
 
@@ -34,7 +33,7 @@ export default class PWCMap {
      * Register control methods
      */
     this.controls = {
-      create: MapControlService.createControl
+      create: PWCMapControlsService.createControl
     };
   }
 }

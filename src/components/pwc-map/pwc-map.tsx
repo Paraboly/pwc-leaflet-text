@@ -1,6 +1,6 @@
 import { Element, Component, Prop, h, Method } from "@stencil/core";
 import { MapFactory } from "../../core/module";
-import PWCMap from "../../core/models/pwc-map.model";
+import PWCMap from "./services/pwc-map.model";
 
 @Component({
   tag: "pwc-map",
@@ -29,7 +29,7 @@ export class PwcMap {
    * @memberof PwcMap
    */
   @Method()
-  async getMap(): Promise<PwcMap> {
+  async getMap(): Promise<any> {
     return Promise.resolve(this.map);
   }
 

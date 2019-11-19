@@ -20,7 +20,7 @@ export namespace Components {
     * @returns the map instance
     * @memberof PwcMap
     */
-    'getMap': () => Promise<PwcMap>;
+    'getMap': () => Promise<any>;
   }
   interface PwcMapControls {
     /**
