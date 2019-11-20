@@ -12,6 +12,10 @@ export class Map {
   componentDidLoad() {}
 
   render() {
-    return;
+    return (
+      <div class="control-guide animated fadeInLeft">
+        Etiketi eklemek istediğiniz noktaya çift tıklayın.{" "}
+      </div>
+    );
   }
 }

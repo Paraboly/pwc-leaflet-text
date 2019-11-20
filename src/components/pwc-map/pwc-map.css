@@ -27,3 +27,7 @@
   border-top: 3px solid transparent;
   line-height: 13px;
 }
+
+.leaflet-container.crosshair-cursor-enabled {
+  cursor: crosshair;
+}

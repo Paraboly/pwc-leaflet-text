@@ -51,8 +51,11 @@ export class PwcMapControls {
       /**
        * Get default custom control config
        */
-      const controlConfig =
-        PWC_MAP_CONTROLS_CONSTANT.CONTROL_CONFIGS[controlName];
+      const controlConfig = Object.assign(
+        {},
+        PWC_MAP_CONTROLS_CONSTANT.CONTROL_CONFIGS[controlName],
+        { onTriggered: this.onControlTriggered.bind(this) }
+      );
 
       /**
        * Create custom control and push to controlsGroup
@@ -64,7 +67,11 @@ export class PwcMapControls {
     /**
      * Register native controls
      */
-    this.controlsGroup.push(L.control.scale());
+    this.controlsGroup.push(L.control.scale({ metric: true, imperial: false }));
+  }
+
+  private onControlTriggered(controlConfig) {
+    console.log(controlConfig);
   }
 
   /**
@@ -94,10 +101,6 @@ export class PwcMapControls {
   }
 
   render() {
-    return (
-      <div class="pwc-map-control-container">
-        <p>Hello pwc-map-control-container!</p>
-      </div>
-    );
+    return null;
   }
 }

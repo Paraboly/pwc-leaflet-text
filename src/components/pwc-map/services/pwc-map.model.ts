@@ -1,5 +1,5 @@
 import PWC_MAP_CONSTANTS from "../../../core/constants";
-import { PWCMapControlsService } from "../../pwc-map-controls/pwc-map-controls.service";
+import { PWCMapControlsService } from "../../pwc-map-controls/services/pwc-map-controls.service";
 
 /**
  *
