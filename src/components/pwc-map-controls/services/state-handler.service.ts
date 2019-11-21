@@ -12,5 +12,7 @@ export enum STATES {
  * @class PWCMapControlStateHandler
  */
 export abstract class PWCMapControlStateHandler {
-  public static detectPoint(map: L.Map) {}
+  public static detectPoint(map: L.Map) {
+    console.log(map);
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, h, Element, Method } from "@stencil/core";
+import { Component, Element, Method } from "@stencil/core";
 import L from "leaflet";
 import PWCMap from "../pwc-map/services/pwc-map.model";
 import PWC_MAP_CONTROLS_CONSTANT from "./pwc-map-controls.constant";
