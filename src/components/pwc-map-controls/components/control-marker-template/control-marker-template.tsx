@@ -14,6 +14,8 @@ export class Map {
   @State() fontSize: string = "14";
   @State() fontColor: string;
   @State() bgColor: string;
+  @State() angle: string;
+  @State() size: string = "10";
 
   handleSubmit(e) {
     e.preventDefault();
@@ -27,17 +29,43 @@ export class Map {
 
   componentDidLoad() {
     const self = this;
-    const fontSlider = this.element.shadowRoot.querySelector("#font-size");
-    fontSlider["min"] = 10;
+    const ibox =
+      self.element.shadowRoot.lastElementChild.shadowRoot.lastElementChild;
+    const iboxTitle =
+      self.element.shadowRoot.lastElementChild.children[0].shadowRoot
+        .lastElementChild;
 
-    fontSlider.addEventListener("value-change", function() {
-      self.fontSize = fontSlider["value"];
+    const sliderConfigs = [
+      { id: "slider-font-size", model: "fontSize", min: 10 },
+      { id: "slider-size", model: "size", min: 5 },
+      { id: "slider-angle", model: "angle", min: -180 }
+    ];
+
+    sliderConfigs.map(sCfg => {
+      const slider = this.element.shadowRoot.querySelector(`#${sCfg.id}`);
+      slider["min"] = sCfg["min"];
+      slider.addEventListener("value-change", function() {
+        self[sCfg.model] = slider["value"];
+        if (sCfg.model === "angle") {
+          ibox.setAttribute(
+            "style",
+            `transform: rotate(${self[sCfg.model]}deg);`
+          );
+        }
+        if (sCfg.model === "size") {
+          ibox.setAttribute(
+            "style",
+            `transform: scale(${parseInt(self[sCfg.model]) / 10});`
+          );
+        }
+      });
     });
 
-    [
+    const colorPickerConfigs = [
       { id: "color-picker-font", model: "fontColor" },
       { id: "color-picker-bg", model: "bgColor" }
-    ].map(cpConf => {
+    ];
+    colorPickerConfigs.map(cpConf => {
       const colorPicker = this.element.shadowRoot.querySelector(
         `#${cpConf.id}`
       );
@@ -46,12 +74,13 @@ export class Map {
         "#101516",
         "#951955",
         "#130394",
-        "#444444"
+        "#444444",
+        "transparent"
       ];
       colorPicker.addEventListener("colorPickedEvent", event => {
         self[cpConf.model] = event["detail"];
         if (cpConf.model === "bgColor")
-          self.element.shadowRoot.lastElementChild.children[0].shadowRoot.lastElementChild.setAttribute(
+          iboxTitle.setAttribute(
             "style",
             `background-color: ${self[cpConf.model]};border: none;`
           );
@@ -82,13 +111,37 @@ export class Map {
             <div class="form-group">
               <label>Font: </label>
               <paper-slider
-                id="font-size"
+                id="slider-font-size"
                 pin
                 snaps
                 max="40"
                 max-markers="20"
                 step="1"
                 value={this.fontSize}
+              ></paper-slider>
+            </div>
+            <div class="form-group">
+              <label>Döndür: </label>
+              <paper-slider
+                id="slider-angle"
+                pin
+                snaps
+                max="180"
+                max-markers="20"
+                step="15"
+                value={this.angle}
+              ></paper-slider>
+            </div>
+            <div class="form-group">
+              <label>Genislet: </label>
+              <paper-slider
+                id="slider-size"
+                pin
+                snaps
+                max="40"
+                max-markers="10"
+                step="4"
+                value={this.size}
               ></paper-slider>
             </div>
             <div class="form-group">
