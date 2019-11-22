@@ -1,15 +1,6 @@
 import PWCMap from "./pwc-map.model";
-
 export class MapFactory {
-  /**
-   * @static
-   * @param {Object} settings
-   * @returns PWCMap instance with given settings
-   * @memberof MapFactory
-   */
-  public static getOne(settings?: {}) {
+  public static getOne(settings: any) {
     return new PWCMap(settings);
   }
-
-  public static getMultiple() {}
 }
