@@ -2,7 +2,7 @@ import L from "leaflet";
 import PWC_MAP_CONTROLS_CONSTANT from "../pwc-map-controls.constant";
 import PWCUtils from "../../../core/utils.service";
 import { STATES } from "./state-handler.service";
-import LeafletMarkerFactory from "../../../core/sources/leaflet/marker.factory";
+import { PWCMapMarkerFactory } from "../../pwc-map-marker/services/pwc-map-marker.factory";
 export abstract class PWCMapControlsService {
   /**
    * @static
@@ -13,6 +13,7 @@ export abstract class PWCMapControlsService {
    * @returns new custom control instance
    * @memberof PWCMapControlsService
    */
+
   public static createControl(
     controlName: string,
     config: {
@@ -125,10 +126,10 @@ export abstract class PWCMapControlsService {
         setTimeout(() => map.doubleClickZoom.enable());
         L.DomUtil.removeClass(map["_container"], "crosshair-cursor-enabled");
 
-        LeafletMarkerFactory.getDivMarker({
+        PWCMapMarkerFactory.getOne({
           latlng: event["latlng"],
           template: "<control-marker-template/>"
-        }).addTo(map);
+        }).instance.addTo(map);
       });
     }
     /**

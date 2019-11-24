@@ -1,7 +1,7 @@
 import L from "leaflet";
 import { CONSTANTS } from "../../module";
 
-export default class LeafletService {
+abstract class LeafletService {
   public static createLayer(
     url: string,
     config: L.TileLayerOptions = {
@@ -11,3 +11,5 @@ export default class LeafletService {
     return new L.TileLayer(url, config);
   }
 }
+
+export default LeafletService;
