@@ -32,6 +32,13 @@
   cursor: crosshair;
 }
 
+.pwc-custom-control > *:nth-child(2) {
+  position: absolute;
+  top: 0;
+  left: 40px;
+  width: 300px;
+}
+
 control-marker-template {
   display: flex;
 }

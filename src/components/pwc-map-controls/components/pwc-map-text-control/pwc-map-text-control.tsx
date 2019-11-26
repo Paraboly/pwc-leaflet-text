@@ -1,6 +1,6 @@
 import { Component, Prop, h, Element, State } from "@stencil/core";
 @Component({
-  tag: "pwc-map-text-control",
+  tag: "pwc-map-text-control2",
   styleUrls: ["./pwc-map-text-control.css"],
   shadow: true
 })

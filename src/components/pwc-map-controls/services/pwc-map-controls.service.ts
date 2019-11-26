@@ -57,7 +57,7 @@ export abstract class PWCMapControlsService {
   ): HTMLElement {
     const controlButton = L.DomUtil.create(
       "div",
-      "leaflet-bar leaflet-control leaflet-control-label"
+      "leaflet-bar leaflet-control pwc-custom-control"
     );
 
     controlButton.innerHTML = `<pwc-tooltip tooltip-alignment="right" tooltip-text="${cfg.tooltipText}" tooltip-source="${cfg.icon}"></pwc-tooltip>`;
