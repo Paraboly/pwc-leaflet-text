@@ -10,7 +10,7 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
-  interface ControlMarkerTemplate {
+  interface PwcEditableText {
     'bgColor': string;
     'fontColor': string;
     'fontSize': string;
@@ -42,10 +42,6 @@ export namespace Components {
   interface PwcMapTextControl {
     'form': any;
   }
-  interface PwcMapTextControl2 {
-    'config': Object;
-    'map': any;
-  }
   interface PwcTextControl {
     'form': any;
     'shape': any;
@@ -55,10 +51,10 @@ export namespace Components {
 declare global {
 
 
-  interface HTMLControlMarkerTemplateElement extends Components.ControlMarkerTemplate, HTMLStencilElement {}
-  var HTMLControlMarkerTemplateElement: {
-    prototype: HTMLControlMarkerTemplateElement;
-    new (): HTMLControlMarkerTemplateElement;
+  interface HTMLPwcEditableTextElement extends Components.PwcEditableText, HTMLStencilElement {}
+  var HTMLPwcEditableTextElement: {
+    prototype: HTMLPwcEditableTextElement;
+    new (): HTMLPwcEditableTextElement;
   };
 
   interface HTMLPwcMapElement extends Components.PwcMap, HTMLStencilElement {}
@@ -85,30 +81,23 @@ declare global {
     new (): HTMLPwcMapTextControlElement;
   };
 
-  interface HTMLPwcMapTextControl2Element extends Components.PwcMapTextControl2, HTMLStencilElement {}
-  var HTMLPwcMapTextControl2Element: {
-    prototype: HTMLPwcMapTextControl2Element;
-    new (): HTMLPwcMapTextControl2Element;
-  };
-
   interface HTMLPwcTextControlElement extends Components.PwcTextControl, HTMLStencilElement {}
   var HTMLPwcTextControlElement: {
     prototype: HTMLPwcTextControlElement;
     new (): HTMLPwcTextControlElement;
   };
   interface HTMLElementTagNameMap {
-    'control-marker-template': HTMLControlMarkerTemplateElement;
+    'pwc-editable-text': HTMLPwcEditableTextElement;
     'pwc-map': HTMLPwcMapElement;
     'pwc-map-controls': HTMLPwcMapControlsElement;
     'pwc-map-marker': HTMLPwcMapMarkerElement;
     'pwc-map-text-control': HTMLPwcMapTextControlElement;
-    'pwc-map-text-control2': HTMLPwcMapTextControl2Element;
     'pwc-text-control': HTMLPwcTextControlElement;
   }
 }
 
 declare namespace LocalJSX {
-  interface ControlMarkerTemplate {
+  interface PwcEditableText {
     'bgColor'?: string;
     'fontColor'?: string;
     'fontSize'?: string;
@@ -127,22 +116,17 @@ declare namespace LocalJSX {
   interface PwcMapTextControl {
     'form'?: any;
   }
-  interface PwcMapTextControl2 {
-    'config'?: Object;
-    'map'?: any;
-  }
   interface PwcTextControl {
     'form'?: any;
     'shape'?: any;
   }
 
   interface IntrinsicElements {
-    'control-marker-template': ControlMarkerTemplate;
+    'pwc-editable-text': PwcEditableText;
     'pwc-map': PwcMap;
     'pwc-map-controls': PwcMapControls;
     'pwc-map-marker': PwcMapMarker;
     'pwc-map-text-control': PwcMapTextControl;
-    'pwc-map-text-control2': PwcMapTextControl2;
     'pwc-text-control': PwcTextControl;
   }
 }
@@ -153,12 +137,11 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
   export namespace JSX {
     interface IntrinsicElements {
-      'control-marker-template': LocalJSX.ControlMarkerTemplate & JSXBase.HTMLAttributes<HTMLControlMarkerTemplateElement>;
+      'pwc-editable-text': LocalJSX.PwcEditableText & JSXBase.HTMLAttributes<HTMLPwcEditableTextElement>;
       'pwc-map': LocalJSX.PwcMap & JSXBase.HTMLAttributes<HTMLPwcMapElement>;
       'pwc-map-controls': LocalJSX.PwcMapControls & JSXBase.HTMLAttributes<HTMLPwcMapControlsElement>;
       'pwc-map-marker': LocalJSX.PwcMapMarker & JSXBase.HTMLAttributes<HTMLPwcMapMarkerElement>;
       'pwc-map-text-control': LocalJSX.PwcMapTextControl & JSXBase.HTMLAttributes<HTMLPwcMapTextControlElement>;
-      'pwc-map-text-control2': LocalJSX.PwcMapTextControl2 & JSXBase.HTMLAttributes<HTMLPwcMapTextControl2Element>;
       'pwc-text-control': LocalJSX.PwcTextControl & JSXBase.HTMLAttributes<HTMLPwcTextControlElement>;
     }
   }

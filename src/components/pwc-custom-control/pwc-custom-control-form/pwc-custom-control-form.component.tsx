@@ -15,6 +15,7 @@ export class PWCTextControl {
   @Prop() form: any;
 
   componentDidLoad() {
+    console.log(this.form);
     console.log(JSON.parse(this.form));
     console.log(new PWCCustomControlForm(JSON.parse(this.form)));
     console.log(this.form);

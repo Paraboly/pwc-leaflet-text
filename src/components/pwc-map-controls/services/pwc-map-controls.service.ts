@@ -128,7 +128,7 @@ export abstract class PWCMapControlsService {
 
         PWCMapMarkerFactory.getOne({
           latlng: event["latlng"],
-          template: "<control-marker-template/>",
+          template: "<pwc-editable-text/>",
           options: { draggable: true }
         }).instance.addTo(map);
       });
@@ -137,5 +137,24 @@ export abstract class PWCMapControlsService {
      * Trigger callback
      */
     // cfg.onTriggered(cfg);
+  }
+
+  /**
+   * @static
+   * @description Inject props to rendered Custom Control Web Component
+   * @param {string} controlName
+   * @memberof PWCMapControlsService
+   */
+  public static injectPropsToCustomControl(controlName: string) {
+    const controlConfig =
+      PWC_MAP_CONTROLS_CONSTANT.CONTROL_CONFIGS[controlName];
+
+    const control = document.querySelector(controlConfig.tag);
+    /**
+     * Inject component params to control's web component
+     */
+    Object.keys(controlConfig.params).map(
+      key => (control[key] = controlConfig.params[key])
+    );
   }
 }

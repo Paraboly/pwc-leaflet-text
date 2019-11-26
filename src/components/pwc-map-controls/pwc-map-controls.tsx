@@ -35,13 +35,6 @@ export class PwcMapControls {
        * Add ControlsGroup to Map Instance
        */
       this.addControlsToMap();
-
-      /**
-       * Inject props to registered control component
-       */
-      setTimeout(() => {
-        this.injectProps();
-      }, 2500);
     });
   }
 
@@ -77,28 +70,8 @@ export class PwcMapControls {
     this.controlsGroup.push(L.control.scale({ metric: true, imperial: false }));
   }
 
-  private injectProps() {
-    /**
-     * For each custom control
-     */
-    PWC_MAP_CONTROLS_CONSTANT.DEFAULT_CUSTOM_CONTROLS.map(controlName => {
-      const controlConfig =
-        PWC_MAP_CONTROLS_CONSTANT.CONTROL_CONFIGS[controlName];
-
-      const control = document.querySelector(controlConfig.tag);
-
-      console.log(control);
-      /**
-       * Inject component params to component web component
-       */
-      Object.keys(controlConfig.params).map(
-        key => (control[key] = controlConfig.params[key])
-      );
-    });
-  }
-
   private onControlTriggered(controlConfig) {
-    console.log(controlConfig);
+    console.log("onControlTriggered: ", controlConfig);
   }
 
   /**
