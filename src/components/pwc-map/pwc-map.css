@@ -39,6 +39,11 @@
   width: 300px;
 }
 
+.pwc-leaflet-div-marker {
+  outline: none;
+}
+
 control-marker-template {
   display: flex;
+  position: relative;
 }

@@ -11,6 +11,7 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 export namespace Components {
   interface ControlMarkerTemplate {
+    'bgColor': string;
     'fontColor': string;
     'fontSize': string;
     'text'?: string;
@@ -108,6 +109,7 @@ declare global {
 
 declare namespace LocalJSX {
   interface ControlMarkerTemplate {
+    'bgColor'?: string;
     'fontColor'?: string;
     'fontSize'?: string;
     'text'?: string;

@@ -128,7 +128,8 @@ export abstract class PWCMapControlsService {
 
         PWCMapMarkerFactory.getOne({
           latlng: event["latlng"],
-          template: "<control-marker-template/>"
+          template: "<control-marker-template/>",
+          options: { draggable: true }
         }).instance.addTo(map);
       });
     }
