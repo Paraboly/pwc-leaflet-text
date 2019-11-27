@@ -32,7 +32,10 @@
   <pwc-map>
     <pwc-map-controls></pwc-map-controls>
   </pwc-map>
-
+  <script>
+    const control = document.querySelector("pwc-map-controls")
+    control.addEventListener("saved", (data) => { console.log(data) });
+  </script>
 </body>
 
 </html>

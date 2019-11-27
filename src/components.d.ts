@@ -117,6 +117,7 @@ declare namespace LocalJSX {
   }
   interface PwcMapControls {
     'map'?: any;
+    'onSaved'?: (event: CustomEvent<any>) => void;
   }
   interface PwcMapMarker {
     'config'?: {};
@@ -124,6 +125,7 @@ declare namespace LocalJSX {
   interface PwcTextControl {
     'form'?: any;
     'map'?: any;
+    'onSave'?: (event: CustomEvent<any>) => void;
     'shape'?: any;
   }
 

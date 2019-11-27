@@ -1,4 +1,4 @@
-import { Component, Prop, State, h } from "@stencil/core";
+import { Component, Prop, State, h, Event, EventEmitter } from "@stencil/core";
 import PWCCustomControl from "../../pwc-map-controls/components/pwc-custom-control/pwc-custom-control.interface";
 import L from "leaflet";
 import { PWCMapMarkerFactory } from "../../pwc-map-marker/services/pwc-map-marker.factory";
@@ -12,6 +12,7 @@ enum STATES {
 })
 export class PWCTextControl implements PWCCustomControl {
   private pin;
+  @Event() save: EventEmitter;
   @State() state: STATES = STATES.POINT_DETECTION;
   @Prop() map;
   @Prop() shape;
@@ -61,10 +62,15 @@ export class PWCTextControl implements PWCCustomControl {
   }
 
   onFormSubmitted(payload) {
-    console.log(payload);
-    console.log(this.pin.instance);
+    const geojson = this.pin.instance.toGeoJSON();
+    console.log(this.pin.instance._icon.firstChild.firstChild);
+    console.log(this.pin.instance._icon.firstChild.firstChild.style.transform);
+    payload.detail.shapeProps.transform = this.pin.instance._icon.firstChild.firstChild.style.transform;
+    geojson.properties = payload.detail;
+
+    this.save.emit(geojson);
+
     this.map.instance.removeLayer(this.pin.instance);
-    document.body.querySelector("pwc-map-controls")["cancelActiveControl"]();
   }
 
   onFormCanceled() {

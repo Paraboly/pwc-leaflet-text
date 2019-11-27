@@ -1,4 +1,13 @@
-import { Component, Element, Method, State, h, Prop } from "@stencil/core";
+import {
+  Component,
+  Element,
+  Method,
+  State,
+  h,
+  Prop,
+  Event,
+  EventEmitter
+} from "@stencil/core";
 import L from "leaflet";
 import PWC_MAP_CONTROLS_CONSTANT from "./pwc-map-controls.constant";
 import PWCUtils from "../../core/utils.service";
@@ -9,6 +18,7 @@ import PWCMap from "../pwc-map/services/pwc-map.model";
   styleUrl: "pwc-map-controls.css"
 })
 export class PwcMapControls {
+  @Event() saved: EventEmitter;
   @Element() private element: HTMLElement;
   @Prop() map;
   @State() activeControl = null;
@@ -107,6 +117,11 @@ export class PwcMapControls {
     });
   }
 
+  onFormSave(event) {
+    this.cancelActiveControl();
+    this.saved.emit(event.detail);
+  }
+
   /**
    * @description Get registered controls
    * @returns {Promise<Array<L.Control>>} List of registered controls
@@ -129,6 +144,7 @@ export class PwcMapControls {
         <this.activeControl.component
           form={this.activeControl.params.form}
           map={this.map}
+          onSave={this.onFormSave.bind(this)}
         />
       )
     );
