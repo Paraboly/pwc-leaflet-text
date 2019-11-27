@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "@paraboly/pwc-color-picker": "0.0.3",
-    "@paraboly/pwc-ibox": "0.0.7",
+    "@paraboly/pwc-ibox": "0.1.0",
     "@polymer/paper-slider": "^3.0.1",
     "@types/leaflet": "^1.5.2",
     "leaflet": "^1.6.0"

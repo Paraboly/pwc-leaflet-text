@@ -19,7 +19,6 @@ abstract class LeafletMapFactory {
     layer?: { url: string; config: L.TileLayerOptions };
     options: L.MapOptions;
   }) {
-    console.log(cfg);
     const map = new L.Map(cfg.target, cfg.options);
 
     if (cfg.layer && cfg.layer.url) {

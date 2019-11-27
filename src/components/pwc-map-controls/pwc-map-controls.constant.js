@@ -6,7 +6,12 @@ const PWC_MAP_CONTROLS_CONSTANT = {
       template: "<pwc-custom-control-form/>",
       params: {
         form: {
-          title: "Etiket Düzenle"
+          title: "Etiket Düzenle",
+          fontSize: 20,
+          angle: 90,
+          width: 120,
+          fontColor: "#f6b73c",
+          bgColor: "#e66465"
         }
       },
       icon: "https://www.svgrepo.com/show/14960/text-box.svg",

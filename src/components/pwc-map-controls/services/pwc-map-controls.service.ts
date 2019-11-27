@@ -3,7 +3,7 @@ import PWC_MAP_CONTROLS_CONSTANT from "../pwc-map-controls.constant";
 import PWCUtils from "../../../core/utils.service";
 import { STATES } from "./state-handler.service";
 import { PWCMapMarkerFactory } from "../../pwc-map-marker/services/pwc-map-marker.factory";
-export abstract class PWCMapControlsService {
+abstract class PWCMapControlsService {
   /**
    * @static
    * @description Given parameters, custom control will be created and control instance will be returned
@@ -104,7 +104,14 @@ export abstract class PWCMapControlsService {
   private static onControlActivated(
     control: HTMLElement,
     map: L.Map,
-    cfg: { tooltipText: string; icon: string; template: string; onTriggered }
+    cfg: {
+      tooltipText: string;
+      icon: string;
+      template: string;
+      onTriggered;
+      tag: string;
+      params: { form: any };
+    }
   ) {
     /**
      * Before control action activation, we ensure that there should be a single child,
@@ -116,6 +123,10 @@ export abstract class PWCMapControlsService {
 
     if (state === STATES.START) {
       PWCUtils.renderComponent(control, cfg.template);
+      PWCMapControlsService.injectPropsToCustomControlForm(
+        control,
+        cfg.params.form
+      );
       L.DomUtil.addClass(map["_container"], "crosshair-cursor-enabled");
       state = STATES.POINT_DETECTION;
     }
@@ -141,20 +152,16 @@ export abstract class PWCMapControlsService {
 
   /**
    * @static
-   * @description Inject props to rendered Custom Control Web Component
-   * @param {string} controlName
+   * @description Inject props to control form
+   * @param {HTMLElement} control
+   * @param {string} formProps
    * @memberof PWCMapControlsService
    */
-  public static injectPropsToCustomControl(controlName: string) {
-    const controlConfig =
-      PWC_MAP_CONTROLS_CONSTANT.CONTROL_CONFIGS[controlName];
-
-    const control = document.querySelector(controlConfig.tag);
-    /**
-     * Inject component params to control's web component
-     */
-    Object.keys(controlConfig.params).map(
-      key => (control[key] = controlConfig.params[key])
-    );
+  public static injectPropsToCustomControlForm(control, formProps: any) {
+    const formComponent = control.querySelector("pwc-custom-control-form");
+    console.log(formProps);
+    formComponent["form"] = formProps;
   }
 }
+
+export default PWCMapControlsService;

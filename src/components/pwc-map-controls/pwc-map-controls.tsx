@@ -87,7 +87,9 @@ export class PwcMapControls {
    * @memberof PwcMapControls
    */
   public addControlsToMap() {
-    this.controlsGroup.map(control => control.addTo(this.map.instance));
+    this.controlsGroup.map(control => {
+      control.addTo(this.map.instance);
+    });
   }
 
   /**

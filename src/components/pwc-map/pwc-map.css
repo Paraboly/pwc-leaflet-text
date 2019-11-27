@@ -32,11 +32,10 @@
   cursor: crosshair;
 }
 
-.pwc-custom-control > *:nth-child(2) {
+.pwc-custom-control pwc-ibox {
   position: absolute;
-  top: 0;
+  top: -3px;
   left: 40px;
-  width: 300px;
 }
 
 .pwc-leaflet-div-marker {

@@ -1,0 +1,25 @@
+.ibox {
+  width: 260px;
+}
+.ibox-title {
+  min-height: auto !important;
+  text-align: left;
+  font-weight: 500;
+  font-size: initial;
+}
+
+pwc-ibox-content .form-group {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+}
+
+pwc-ibox-content .form-group label {
+  width: 80px;
+  text-align: left;
+}
+
+pwc-ibox-content .form-group paper-slider,
+pwc-ibox-content .form-group input {
+  flex: 1;
+}

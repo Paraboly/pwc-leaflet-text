@@ -1,5 +1,5 @@
 import PWC_MAP_CONSTANTS, { MAP_SOURCES } from "../../../core/constants";
-import { PWCMapControlsService } from "../../pwc-map-controls/services/pwc-map-controls.service";
+import PWCMapControlService from "../../pwc-map-controls/services/pwc-map-controls.service";
 
 /**
  *
@@ -28,7 +28,7 @@ export default class PWCMap {
     Object.assign(this.settings, settings);
 
     this.controls = {
-      create: PWCMapControlsService.createControl
+      create: PWCMapControlService.createControl
     };
 
     this.instance = PWC_MAP_CONSTANTS.FACTORIES[
