@@ -24,15 +24,18 @@ export default class PWCMap {
     }
   };
 
-  constructor(settings) {
+  constructor(settings, map?) {
     Object.assign(this.settings, settings);
 
     this.controls = {
       create: PWCMapControlService.createControl
     };
-
-    this.instance = PWC_MAP_CONSTANTS.FACTORIES[
-      settings.source || MAP_SOURCES.Leaflet
-    ].MAP.getOne(this.settings);
+    if (map) {
+      this.instance = map;
+    } else {
+      this.instance = PWC_MAP_CONSTANTS.FACTORIES[
+        settings.source || MAP_SOURCES.Leaflet
+      ].MAP.getOne(this.settings);
+    }
   }
 }

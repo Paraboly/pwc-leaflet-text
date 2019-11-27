@@ -47,6 +47,14 @@ export class PWCTextControl implements PWCCustomControl {
         options: { draggable: true }
       });
 
+      this.pin.instance.on("dragstart", () => {
+        this.map.instance.dragging.disable();
+      });
+
+      this.pin.instance.on("dragend", () => {
+        this.map.instance.dragging.enable();
+      });
+
       this.pin.instance.addTo(this.map.instance);
       this.state = STATES.SHOW_FORM;
     });

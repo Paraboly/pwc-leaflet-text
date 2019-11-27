@@ -41,7 +41,6 @@
     "generate": "stencil generate"
   },
   "dependencies": {
-    "@paraboly/pwc-color-picker": "0.0.3",
     "@paraboly/pwc-dynamic-form": "0.0.4",
     "@paraboly/pwc-ibox": "0.1.0",
     "@polymer/paper-slider": "^3.0.1",

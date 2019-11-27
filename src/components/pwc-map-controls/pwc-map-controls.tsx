@@ -1,4 +1,4 @@
-import { Component, Element, Method, State, h } from "@stencil/core";
+import { Component, Element, Method, State, h, Prop } from "@stencil/core";
 import L from "leaflet";
 import PWC_MAP_CONTROLS_CONSTANT from "./pwc-map-controls.constant";
 import PWCUtils from "../../core/utils.service";
@@ -10,33 +10,42 @@ import PWCMap from "../pwc-map/services/pwc-map.model";
 })
 export class PwcMapControls {
   @Element() private element: HTMLElement;
-  private map: PWCMap;
+  @Prop() map;
   @State() activeControl = null;
   /**
    * Holds registered controls
    */
   private controlsGroup: Array<L.Control>;
 
+  componentWillLoad() {
+    if (!this.element.parentElement["getMap"]) {
+      this.map = new PWCMap({}, this.map);
+    }
+  }
   componentDidLoad() {
     /**
      * Initialize control Group
      */
     this.controlsGroup = [];
-
     /**
      * Get Map Instance
      */
-    this.element.parentElement["getMap"]().then((map: PWCMap) => {
-      this.map = map;
+    if (this.element.parentElement["getMap"]) {
+      this.element.parentElement["getMap"]().then((map: PWCMap) => {
+        this.map = map;
+        /**
+         * Register controls to ControlGroup and Add ControlsGroup to Map Instance
+         */
+        this.registerControls();
+        this.addControlsToMap();
+      });
+    } else {
       /**
-       * Register controls to ControlGroup
+       * Register controls to ControlGroup and Add ControlsGroup to Map Instance
        */
       this.registerControls();
-      /**
-       * Add ControlsGroup to Map Instance
-       */
       this.addControlsToMap();
-    });
+    }
   }
 
   /**

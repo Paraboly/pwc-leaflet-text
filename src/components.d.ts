@@ -38,6 +38,7 @@ export namespace Components {
     * @memberof PwcMapControls
     */
     'getControls': () => Promise<any>;
+    'map': any;
   }
   interface PwcMapMarker {
     'config': {};
@@ -114,7 +115,9 @@ declare namespace LocalJSX {
     */
     'config'?: Object;
   }
-  interface PwcMapControls {}
+  interface PwcMapControls {
+    'map'?: any;
+  }
   interface PwcMapMarker {
     'config'?: {};
   }
