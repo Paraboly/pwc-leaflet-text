@@ -36,14 +36,15 @@ export abstract class PWCMapRoutingService {
 
   public static onStop() {
     console.log(this.getRoute(routePoints))
-    this.removePointsOnMap()
+    const oldViaPoints = viaPoints;
+    viaPoints = [];
+    this.removePointsOnMap(oldViaPoints)
   }
 
-  private static removePointsOnMap() {
+  private static removePointsOnMap(oldViaPoints) {
     globalMap.instance.eachLayer(function (layer) {
-      if (viaPoints.includes(layer)) {
+      if (oldViaPoints.includes(layer)) {
         globalMap.instance.removeLayer(layer);
-        viaPoints = [];
       }
       console.log(layer);
     });
