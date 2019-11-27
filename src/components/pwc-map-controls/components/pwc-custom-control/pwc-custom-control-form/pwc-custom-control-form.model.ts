@@ -1,5 +1,6 @@
 class PWCCustomControlForm {
   title: string;
+  type = "label";
   created?: string | Date;
   updated?: string | Date;
   shapeProps?: {} = {};
@@ -18,6 +19,7 @@ class PWCCustomControlForm {
   public forServer(): PWCCustomControlForm {
     const forServer = Object.assign({}, this);
     forServer.updated = new Date().toISOString();
+    delete forServer.title;
     return forServer;
   }
 }

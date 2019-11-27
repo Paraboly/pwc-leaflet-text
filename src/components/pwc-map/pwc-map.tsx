@@ -4,8 +4,7 @@ import PWCMap from "./services/pwc-map.model";
 
 @Component({
   tag: "pwc-map",
-  styleUrl: "pwc-map.css",
-  shadow: true
+  styleUrl: "pwc-map.css"
 })
 export class PwcMap {
   @Element() private element: HTMLElement;
@@ -18,7 +17,7 @@ export class PwcMap {
 
   componentDidLoad() {
     this.map = MapFactory.getOne({
-      target: this.element.shadowRoot.querySelector("div")
+      target: this.element.querySelector("div")
     });
   }
 

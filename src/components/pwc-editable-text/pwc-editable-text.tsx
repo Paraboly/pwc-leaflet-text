@@ -7,9 +7,7 @@ import { Component, Prop, h, State, Element } from "@stencil/core";
 export class PWCEditableTextComponent {
   @Element() element: HTMLElement;
   @Prop() text?: string = "Ornek Etiket";
-  @Prop() fontSize: string = "16px";
-  @Prop() fontColor: string = "red";
-  @Prop() bgColor: string = "#FFF";
+  @Prop() styles;
   @State() angle: string = "0";
   @State() margin: string = "10";
   @State() padding: string = "10";
@@ -44,6 +42,7 @@ export class PWCEditableTextComponent {
         </span>
         <textarea
           rows={1}
+          style={this.styles}
           value={this.text}
           placeholder="Metin giriniz..."
           class="form-control"

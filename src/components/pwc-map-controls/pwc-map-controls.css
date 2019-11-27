@@ -1,2 +1,17 @@
-pwc-map-control-container {
+pwc-map-controls .guide {
+  position: absolute;
+  left: 10px;
+  top: 200px;
+  max-width: 200px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 3px;
+  z-index: 999;
+}
+
+pwc-map-controls pwc-custom-control-form {
+  position: absolute;
+  left: 10px;
+  z-index: 999;
+  top: 200px;
 }

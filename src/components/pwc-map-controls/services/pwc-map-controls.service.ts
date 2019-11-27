@@ -1,8 +1,6 @@
 import L from "leaflet";
 import PWC_MAP_CONTROLS_CONSTANT from "../pwc-map-controls.constant";
 import PWCUtils from "../../../core/utils.service";
-import { STATES } from "./state-handler.service";
-import { PWCMapMarkerFactory } from "../../pwc-map-marker/services/pwc-map-marker.factory";
 abstract class PWCMapControlsService {
   /**
    * @static
@@ -75,83 +73,17 @@ abstract class PWCMapControlsService {
     cfg: { tooltipText: string; icon: string; template: string; onTriggered },
     map: L.Map
   ) {
-    const listenerCallbacks = [this.onControlActivated];
+    L.DomEvent.addListener(controlButton, "click", L.DomEvent.stopPropagation);
+    L.DomEvent.addListener(controlButton, "click", L.DomEvent.preventDefault);
 
     L.DomEvent.addListener(
       controlButton,
       "click",
-      L.DomEvent.stopPropagation
-    ).addListener(controlButton, "click", L.DomEvent.preventDefault);
-
-    listenerCallbacks.map(cb =>
-      L.DomEvent.addListener(
-        controlButton,
-        "click",
-        PWCUtils.partial(cb, controlButton, map, cfg),
-        this
-      )
+      PWCUtils.partial(cfg.onTriggered, controlButton, map, cfg),
+      this
     );
 
     L.DomEvent.disableClickPropagation(controlButton);
-  }
-
-  /**
-   * @private
-   * @static
-   * @description When user click any map control, eg: Ruler Control,
-   * selected control will be activated and register its own component.
-   * @param {HTMLElement} Dom element of the control
-   * @param {L.Map} map interacted map instance
-   * @param {{ tooltipText: string; icon: string; template: string; onTriggered: function;}} cfg is configuration parameters for control button
-   * @memberof PWCMapControlsService
-   */
-  private static onControlActivated(
-    control: HTMLElement,
-    map: L.Map,
-    cfg: {
-      tooltipText: string;
-      icon: string;
-      template: string;
-      onTriggered;
-      tag: string;
-      params: { form: any };
-    }
-  ) {
-    /**
-     * Before control action activation, we ensure that there should be a single child,
-     * otherwise it is already activated.
-     */
-    if (control.childElementCount > 1) return;
-
-    let state = STATES.START;
-
-    if (state === STATES.START) {
-      PWCUtils.renderComponent(control, cfg.template);
-      PWCMapControlsService.injectPropsToCustomControlForm(
-        control,
-        cfg.params.form
-      );
-      L.DomUtil.addClass(map["_container"], "crosshair-cursor-enabled");
-      state = STATES.POINT_DETECTION;
-    }
-
-    if (state === STATES.POINT_DETECTION) {
-      map.doubleClickZoom.disable();
-      map.once("click", event => {
-        setTimeout(() => map.doubleClickZoom.enable());
-        L.DomUtil.removeClass(map["_container"], "crosshair-cursor-enabled");
-
-        PWCMapMarkerFactory.getOne({
-          latlng: event["latlng"],
-          template: "<pwc-editable-text/>",
-          options: { draggable: true }
-        }).instance.addTo(map);
-      });
-    }
-    /**
-     * Trigger callback
-     */
-    // cfg.onTriggered(cfg);
   }
 
   /**

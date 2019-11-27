@@ -12,11 +12,10 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 export namespace Components {
   interface PwcCustomControlForm {
     'form': any;
+    'shape': any;
   }
   interface PwcEditableText {
-    'bgColor': string;
-    'fontColor': string;
-    'fontSize': string;
+    'styles': any;
     'text'?: string;
   }
   interface PwcMap {
@@ -32,6 +31,7 @@ export namespace Components {
     'getMap': () => Promise<any>;
   }
   interface PwcMapControls {
+    'cancelActiveControl': () => Promise<any>;
     /**
     * @description Get registered controls
     * @returns List of registered controls
@@ -44,6 +44,7 @@ export namespace Components {
   }
   interface PwcTextControl {
     'form': any;
+    'map': any;
     'shape': any;
   }
 }
@@ -99,11 +100,12 @@ declare global {
 declare namespace LocalJSX {
   interface PwcCustomControlForm {
     'form'?: any;
+    'onFormCanceled'?: (event: CustomEvent<any>) => void;
+    'onFormSubmitted'?: (event: CustomEvent<any>) => void;
+    'shape'?: any;
   }
   interface PwcEditableText {
-    'bgColor'?: string;
-    'fontColor'?: string;
-    'fontSize'?: string;
+    'styles'?: any;
     'text'?: string;
   }
   interface PwcMap {
@@ -118,6 +120,7 @@ declare namespace LocalJSX {
   }
   interface PwcTextControl {
     'form'?: any;
+    'map'?: any;
     'shape'?: any;
   }
 

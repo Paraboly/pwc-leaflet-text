@@ -17,6 +17,7 @@ abstract class PWCUtils {
       .createContextualFragment(template);
 
     wrapperElement.appendChild(controlComponent);
+    return controlComponent;
   };
 }
 

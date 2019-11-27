@@ -1,4 +1,12 @@
-import { Component, Prop, h, Element, State } from "@stencil/core";
+import {
+  Component,
+  Prop,
+  h,
+  Element,
+  State,
+  Event,
+  EventEmitter
+} from "@stencil/core";
 import "@polymer/paper-slider/paper-slider.js";
 import "@paraboly/pwc-ibox";
 import PWCCustomControlForm from "./pwc-custom-control-form.model";
@@ -9,8 +17,11 @@ import PWCUtils from "../../../../../core/utils.service";
   styleUrls: ["./pwc-custom-control-form.css"]
 })
 export class PWCCustomControlFormComponent {
-  @Prop() form: any;
   @Element() elem: HTMLElement;
+  @Event() formSubmitted: EventEmitter;
+  @Event() formCanceled: EventEmitter;
+  @Prop() form: any;
+  @Prop() shape: any;
   @State() fontSize;
   @State() width;
   @State() fontColor;
@@ -25,12 +36,16 @@ export class PWCCustomControlFormComponent {
 
   componentDidLoad() {
     this.registerSliderEventListeners(this.onFormValuesChanged.bind(this));
-    this.registerColorPickers(this.onFormValuesChanged.bind(this));
+    this.setShapeStyle();
   }
 
-  onFormValuesChanged(model, e) {
-    e.preventDefault();
-    this[model] = e.target.value || e.detail;
+  setShapeStyle() {
+    this.shape.instance._icon.firstElementChild["styles"] = {
+      color: this.fontColor,
+      fontSize: this.fontSize + "px",
+      width: this.width + "px",
+      backgroundColor: this.bgColor
+    };
   }
 
   registerSliderEventListeners(callback) {
@@ -47,28 +62,27 @@ export class PWCCustomControlFormComponent {
     });
   }
 
-  registerColorPickers(callback) {
-    const colorPickers = [
-      { id: "font-color-picker", model: "fontColor" },
-      { id: "bg-color-picker", model: "bgColor" }
-    ];
-    colorPickers.map(cp => {
-      const picker = this.elem.querySelector(`#${cp.id}`);
-      picker.addEventListener(
-        "colorPickedEvent",
-        PWCUtils.partial(callback, cp.model)
-      );
-    });
+  onFormValuesChanged(model, e) {
+    e.preventDefault();
+    this[model] = e.target.value;
+    this.setShapeStyle();
   }
 
   onSubmit(e) {
     e.preventDefault();
-    console.log(e);
+    this.form.shapeProps = {
+      color: this.fontColor,
+      fontSize: this.fontSize + "px",
+      width: this.width + "px",
+      backgroundColor: this.bgColor
+    };
+
+    this.formSubmitted.emit(this.form.forServer());
   }
 
   onCancel(e) {
     e.preventDefault();
-    console.log(e);
+    this.formCanceled.emit();
   }
 
   render() {
@@ -103,17 +117,43 @@ export class PWCCustomControlFormComponent {
             </div>
             <div class="form-group">
               <label>Yazı Rengi: </label>
-              <color-picker id="font-color-picker"></color-picker>
+              <input
+                type="color"
+                name="font-color-picker"
+                id="font-color-picker"
+                value={this.fontColor}
+                onChange={PWCUtils.partial(
+                  this.onFormValuesChanged.bind(this),
+                  "fontColor"
+                )}
+              />
             </div>
             <div class="form-group">
               <label>Arkaplan: </label>
-              <color-picker id="bg-color-picker"></color-picker>
+              <input
+                type="color"
+                name="bg-color-picker"
+                id="bg-color-picker"
+                value={this.bgColor}
+                onChange={PWCUtils.partial(
+                  this.onFormValuesChanged.bind(this),
+                  "bgColor"
+                )}
+              />
             </div>
           </form>
         </pwc-ibox-content>
         <pwc-ibox-footer>
-          <input type="button" value="Iptal" onClick={this.onCancel} />
-          <input type="button" value="Kaydet" onClick={this.onSubmit} />
+          <input
+            type="button"
+            value="Iptal"
+            onClick={this.onCancel.bind(this)}
+          />
+          <input
+            type="button"
+            value="Kaydet"
+            onClick={this.onSubmit.bind(this)}
+          />
         </pwc-ibox-footer>
       </pwc-ibox>
     );

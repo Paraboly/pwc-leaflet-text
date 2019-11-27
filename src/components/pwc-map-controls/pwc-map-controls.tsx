@@ -1,16 +1,17 @@
-import { Component, Element, Method } from "@stencil/core";
+import { Component, Element, Method, State, h } from "@stencil/core";
 import L from "leaflet";
-import PWCMap from "../pwc-map/services/pwc-map.model";
 import PWC_MAP_CONTROLS_CONSTANT from "./pwc-map-controls.constant";
+import PWCUtils from "../../core/utils.service";
+import PWCMap from "../pwc-map/services/pwc-map.model";
 
 @Component({
   tag: "pwc-map-controls",
-  styleUrl: "pwc-map-controls.css",
-  shadow: true
+  styleUrl: "pwc-map-controls.css"
 })
 export class PwcMapControls {
   @Element() private element: HTMLElement;
   private map: PWCMap;
+  @State() activeControl = null;
   /**
    * Holds registered controls
    */
@@ -54,7 +55,12 @@ export class PwcMapControls {
       const controlConfig = Object.assign(
         {},
         PWC_MAP_CONTROLS_CONSTANT.CONTROL_CONFIGS[controlName],
-        { onTriggered: this.onControlTriggered.bind(this) }
+        {
+          onTriggered: PWCUtils.partial(
+            this.onControlTriggered.bind(this),
+            PWC_MAP_CONTROLS_CONSTANT.CONTROL_CONFIGS[controlName]
+          )
+        }
       );
 
       /**
@@ -71,7 +77,7 @@ export class PwcMapControls {
   }
 
   private onControlTriggered(controlConfig) {
-    console.log("onControlTriggered: ", controlConfig);
+    this.activeControl = controlConfig;
   }
 
   /**
@@ -102,7 +108,20 @@ export class PwcMapControls {
     return Promise.resolve(this.controlsGroup);
   }
 
+  @Method()
+  async cancelActiveControl(): Promise<any> {
+    this.activeControl = null;
+    return Promise.resolve();
+  }
+
   render() {
-    return null;
+    return (
+      this.activeControl && (
+        <this.activeControl.component
+          form={this.activeControl.params.form}
+          map={this.map}
+        />
+      )
+    );
   }
 }
