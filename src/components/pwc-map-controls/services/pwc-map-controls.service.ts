@@ -47,10 +47,11 @@ abstract class PWCMapControlsService {
   public static generateControlButton(
     map: L.Map,
     cfg: {
-      tooltipText: string;
-      icon: string;
-      template: string;
-      onTriggered;
+      tooltipText?: string;
+      icon?: string;
+      template?: string;
+      position?: string;
+      onTriggered?;
     }
   ): HTMLElement {
     const controlButton = L.DomUtil.create(
@@ -70,7 +71,12 @@ abstract class PWCMapControlsService {
    */
   private static registerEventListeners(
     controlButton: HTMLElement,
-    cfg: { tooltipText: string; icon: string; template: string; onTriggered },
+    cfg: {
+      tooltipText?: string;
+      icon?: string;
+      template?: string;
+      onTriggered?;
+    },
     map: L.Map
   ) {
     L.DomEvent.addListener(controlButton, "click", L.DomEvent.stopPropagation);

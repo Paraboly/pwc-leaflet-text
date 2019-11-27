@@ -6,11 +6,12 @@ const PWC_MAP_CONTROLS_CONSTANT = {
       params: {
         form: {
           title: "Etiket Düzenle",
-          fontSize: 20,
+          fontSize: 16,
           angle: 90,
           width: 120,
-          fontColor: "#f6b73c",
-          bgColor: "#e66465"
+          padding: 5,
+          fontColor: "#4b4b4b",
+          bgColor: "#f2efe9"
         }
       },
       icon: "https://www.svgrepo.com/show/14960/text-box.svg",

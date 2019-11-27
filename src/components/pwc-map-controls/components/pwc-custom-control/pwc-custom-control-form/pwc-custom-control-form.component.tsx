@@ -24,6 +24,7 @@ export class PWCCustomControlFormComponent {
   @Prop() shape: any;
   @State() fontSize;
   @State() width;
+  @State() padding;
   @State() fontColor;
   @State() bgColor;
 
@@ -44,6 +45,7 @@ export class PWCCustomControlFormComponent {
       color: this.fontColor,
       fontSize: this.fontSize + "px",
       width: this.width + "px",
+      padding: this.padding + "px",
       backgroundColor: this.bgColor
     };
   }
@@ -51,7 +53,8 @@ export class PWCCustomControlFormComponent {
   registerSliderEventListeners(callback) {
     const sliders = [
       { id: "slider-font-size", model: "fontSize" },
-      { id: "slider-width", model: "width" }
+      { id: "slider-width", model: "width" },
+      { id: "slider-padding", model: "padding" }
     ];
     sliders.map(slider => {
       var ps = this.elem.querySelector(`#${slider.id}`);
@@ -74,9 +77,9 @@ export class PWCCustomControlFormComponent {
       color: this.fontColor,
       fontSize: this.fontSize + "px",
       width: this.width + "px",
+      padding: this.padding + "px",
       backgroundColor: this.bgColor
     };
-
     this.formSubmitted.emit(this.form.forServer());
   }
 
@@ -113,6 +116,18 @@ export class PWCCustomControlFormComponent {
                 max-markers="10"
                 step="4"
                 value={this.width}
+              ></paper-slider>
+            </div>
+            <div class="form-group">
+              <label>Hücre Boşluğu: </label>
+              <paper-slider
+                id="slider-padding"
+                pin
+                snaps
+                max="25"
+                max-markers="10"
+                step="5"
+                value={this.padding}
               ></paper-slider>
             </div>
             <div class="form-group">
