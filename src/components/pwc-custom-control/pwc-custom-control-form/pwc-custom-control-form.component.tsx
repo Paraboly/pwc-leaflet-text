@@ -7,11 +7,11 @@ const styles = {
   formLabel: { textAlign: "initial", width: "80px" }
 };
 @Component({
-  tag: "pwc-map-text-control",
+  tag: "pwc-custom-control-form",
   styleUrls: [],
   shadow: true
 })
-export class PWCTextControl {
+export class PWCCustomControlFormComponent {
   @Prop() form: any;
 
   componentDidLoad() {

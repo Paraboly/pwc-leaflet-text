@@ -2,8 +2,8 @@ const PWC_MAP_CONTROLS_CONSTANT = {
   CONTROL_CONFIGS: {
     TextControl: {
       controlName: "TextControl",
-      tag: "pwc-map-text-control",
-      template: "<pwc-map-text-control/>",
+      tag: "pwc-custom-control-form",
+      template: "<pwc-custom-control-form/>",
       params: {
         form: {
           title: "Etiket Düzenle"
@@ -14,7 +14,8 @@ const PWC_MAP_CONTROLS_CONSTANT = {
     },
     RulerControl: {
       controlName: "RulerControl",
-      template: "<pwc-map-ruler-control/>",
+      tag: "pwc-custom-control-form",
+      template: "<pwc-custom-control-form/>",
       icon: "https://www.svgrepo.com/show/193018/ruler.svg",
       tooltipText: "Uzunluk ölç"
     },
