@@ -2,6 +2,8 @@ import { Component, Element, Method } from "@stencil/core";
 import L from "leaflet";
 import PWCMap from "../pwc-map/services/pwc-map.model";
 import PWC_MAP_CONTROLS_CONSTANT from "./pwc-map-controls.constant";
+import { PWCMapRoutingService } from '../../core/services/pwc-map-route.service';
+
 
 @Component({
   tag: "pwc-map-controls",
@@ -26,6 +28,7 @@ export class PwcMapControls {
      * Get Map Instance
      */
     this.element.parentElement["getMap"]().then((map: PWCMap) => {
+      PWCMapRoutingService.onStart(map);
       this.map = map;
       /**
        * Register controls to ControlGroup
