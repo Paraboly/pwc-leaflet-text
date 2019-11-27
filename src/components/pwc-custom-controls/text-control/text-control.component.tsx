@@ -1,5 +1,5 @@
 import { Component, Prop } from "@stencil/core";
-import PWCCustomControl from "../pwc-custom-control/pwc-custom-control.interface";
+import PWCCustomControl from "../../pwc-map-controls/components/pwc-custom-control/pwc-custom-control.interface";
 @Component({
   tag: "pwc-text-control",
   styleUrls: [],

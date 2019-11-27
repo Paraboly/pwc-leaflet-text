@@ -23,3 +23,13 @@ pwc-ibox-content .form-group paper-slider,
 pwc-ibox-content .form-group input {
   flex: 1;
 }
+
+.ibox-footer {
+  display: flex;
+  justify-content: space-around;
+}
+
+.ibox-footer input {
+  flex: 1;
+  max-width: 80px;
+}

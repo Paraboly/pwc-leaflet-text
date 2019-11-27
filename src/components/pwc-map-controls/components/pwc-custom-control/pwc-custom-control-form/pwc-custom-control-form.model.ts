@@ -2,16 +2,17 @@ class PWCCustomControlForm {
   title: string;
   created?: string | Date;
   updated?: string | Date;
-  shapeProps?: {
-    color?: string;
-    width?: string;
-  };
+  shapeProps?: {} = {};
   geometry: L.GeoJSON;
 
-  constructor(form: PWCCustomControlForm) {
+  constructor(form: any) {
     this.title = form.title;
     this.created = this.created || new Date().toISOString();
     this.updated = form.updated ? new Date(form.updated) : form.updated;
+
+    Object.keys(form).map(key => {
+      if (key !== "title") this.shapeProps[key] = form[key];
+    });
   }
 
   public forServer(): PWCCustomControlForm {

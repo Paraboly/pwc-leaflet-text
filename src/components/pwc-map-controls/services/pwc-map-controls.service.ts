@@ -77,7 +77,11 @@ abstract class PWCMapControlsService {
   ) {
     const listenerCallbacks = [this.onControlActivated];
 
-    L.DomEvent.addListener(controlButton, "click", L.DomEvent.stop);
+    L.DomEvent.addListener(
+      controlButton,
+      "click",
+      L.DomEvent.stopPropagation
+    ).addListener(controlButton, "click", L.DomEvent.preventDefault);
 
     listenerCallbacks.map(cb =>
       L.DomEvent.addListener(
@@ -159,7 +163,7 @@ abstract class PWCMapControlsService {
    */
   public static injectPropsToCustomControlForm(control, formProps: any) {
     const formComponent = control.querySelector("pwc-custom-control-form");
-    console.log(formProps);
+
     formComponent["form"] = formProps;
   }
 }
