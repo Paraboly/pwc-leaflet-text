@@ -1,6 +1,5 @@
 import {
   Component,
-  Element,
   Method,
   State,
   h,
@@ -18,9 +17,9 @@ import PWCMap from "../pwc-map/services/pwc-map.model";
   styleUrl: "pwc-map-controls.css"
 })
 export class PwcMapControls {
+  private map: PWCMap;
   @Event() saved: EventEmitter;
-  @Element() private element: HTMLElement;
-  @Prop() map;
+  @Prop() config: { map: L.Map; controls?: Object };
   @State() activeControl = null;
   /**
    * Holds registered controls
@@ -28,33 +27,11 @@ export class PwcMapControls {
   private controlsGroup: Array<L.Control>;
 
   componentWillLoad() {
-    if (!this.element.parentElement["getMap"]) {
-      this.map = new PWCMap({}, this.map);
-    }
-  }
-  componentDidLoad() {
     /**
-     * Initialize control Group
+     * If map instance given with config, initialize map controls
      */
-    this.controlsGroup = [];
-    /**
-     * Get Map Instance
-     */
-    if (this.element.parentElement["getMap"]) {
-      this.element.parentElement["getMap"]().then((map: PWCMap) => {
-        this.map = map;
-        /**
-         * Register controls to ControlGroup and Add ControlsGroup to Map Instance
-         */
-        this.registerControls();
-        this.addControlsToMap();
-      });
-    } else {
-      /**
-       * Register controls to ControlGroup and Add ControlsGroup to Map Instance
-       */
-      this.registerControls();
-      this.addControlsToMap();
+    if (this.config && this.config.map) {
+      this.initialize(this.config);
     }
   }
 
@@ -120,6 +97,22 @@ export class PwcMapControls {
   onFormSave(event) {
     this.cancelActiveControl();
     this.saved.emit(event.detail);
+  }
+
+  /**
+   * @description Initialize PWC Map Controls with given config.
+   * @returns {Promise<Array<L.Control>>} List of registered control
+   * @memberof PwcMapControls
+   */
+  @Method()
+  async initialize(config: { map: L.Map; controls?: {} }) {
+    if (!(config && config.map)) {
+      throw new Error("Map configuration not given.");
+    }
+    this.controlsGroup = [];
+    this.map = new PWCMap({}, this.config.map);
+    this.registerControls();
+    this.addControlsToMap();
   }
 
   /**

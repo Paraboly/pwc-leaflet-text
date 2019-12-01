@@ -10,7 +10,7 @@ import {
 import "@polymer/paper-slider/paper-slider.js";
 import "@paraboly/pwc-ibox";
 import PWCCustomControlForm from "./pwc-custom-control-form.model";
-import PWCUtils from "../../../../../core/utils.service";
+import PWCUtils from "../../../../core/utils.service";
 
 @Component({
   tag: "pwc-custom-control-form",

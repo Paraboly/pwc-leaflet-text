@@ -24,21 +24,27 @@ export namespace Components {
     */
     'config': Object;
     /**
-    * @description Allow to get map instance from pwc-map element
-    * @returns the map instance
-    * @memberof PwcMap
+    * Allow to get map instance from pwc-map element
+    * @returns Promise which resolves pwc map instance
+    * @author SchemeSonic
     */
-    'getMap': () => Promise<any>;
+    'getMap': () => Promise<PWCMap>;
   }
   interface PwcMapControls {
     'cancelActiveControl': () => Promise<any>;
+    'config': { map: L.Map; controls?: Object };
     /**
     * @description Get registered controls
     * @returns List of registered controls
     * @memberof PwcMapControls
     */
     'getControls': () => Promise<any>;
-    'map': any;
+    /**
+    * @description Initialize PWC Map Controls with given config.
+    * @returns List of registered control
+    * @memberof PwcMapControls
+    */
+    'initialize': (config: { map: L.Map; controls?: {}; }) => Promise<void>;
   }
   interface PwcMapMarker {
     'config': {};
@@ -114,9 +120,10 @@ declare namespace LocalJSX {
     * Config for the map to be initialized
     */
     'config'?: Object;
+    'onMapInitialized'?: (event: CustomEvent<any>) => void;
   }
   interface PwcMapControls {
-    'map'?: any;
+    'config'?: { map: L.Map; controls?: Object };
     'onSaved'?: (event: CustomEvent<any>) => void;
   }
   interface PwcMapMarker {

@@ -1,7 +1,7 @@
 import { Component, Prop, State, h, Event, EventEmitter } from "@stencil/core";
-import PWCCustomControl from "../../pwc-map-controls/components/pwc-custom-control/pwc-custom-control.interface";
+import PWCCustomControl from "../pwc-custom-control.interface";
 import L from "leaflet";
-import { PWCMapMarkerFactory } from "../../pwc-map-marker/services/pwc-map-marker.factory";
+import { PWCMapMarkerFactory } from "../../../../pwc-map-marker/services/pwc-map-marker.factory";
 enum STATES {
   POINT_DETECTION,
   SHOW_FORM

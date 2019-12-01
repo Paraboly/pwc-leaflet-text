@@ -24,8 +24,6 @@ export default class PWCMapMarker {
     /**
      * If template is given, create div marker, otherwise marker.
      */
-    this.instance = this.settings.template
-      ? actions.getDivMarker(this.settings)
-      : actions.getOne(this.settings);
+    this.instance = actions.getOne(this.settings);
   }
 }
