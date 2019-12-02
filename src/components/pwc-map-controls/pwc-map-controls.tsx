@@ -110,7 +110,7 @@ export class PwcMapControls {
       throw new Error("Map configuration not given.");
     }
     this.controlsGroup = [];
-    this.map = new PWCMap({}, this.config.map);
+    this.map = new PWCMap({}, config.map);
     this.registerControls();
     this.addControlsToMap();
   }

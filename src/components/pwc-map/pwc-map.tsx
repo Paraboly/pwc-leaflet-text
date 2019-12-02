@@ -29,10 +29,9 @@ export class PwcMap {
    * @author SchemeSonic
    */
   @Method()
-  async getMap(): Promise<PWCMap> {
+  async getMap(): Promise<any> {
     return Promise.resolve(this.map);
   }
-  //@Prop() getMap: () => Promise<PWCMap> = this.getMapInstance;
 
   componentDidLoad() {
     this.map = MapFactory.getOne({

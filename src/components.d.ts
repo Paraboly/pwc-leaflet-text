@@ -28,7 +28,7 @@ export namespace Components {
     * @returns Promise which resolves pwc map instance
     * @author SchemeSonic
     */
-    'getMap': () => Promise<PWCMap>;
+    'getMap': () => Promise<any>;
   }
   interface PwcMapControls {
     'cancelActiveControl': () => Promise<any>;

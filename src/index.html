@@ -32,14 +32,26 @@
   <pwc-map>
     <pwc-map-controls></pwc-map-controls>
   </pwc-map>
+
   <script>
     const pwcMapControls = document.querySelector("pwc-map-controls");
+    /**
+    * We should wait till the web component ready
+    */
+    customElements.whenDefined('pwc-map').then(() => {
+      const pwcMap = document.querySelector("pwc-map");
 
-    const pwcMap = document.querySelector("pwc-map");
-    pwcMap["getMap"]().then((map) => {
-      pwcMapControls["initialize"]({ map })
-
+      /**
+      * Get map instance
+      */
+      pwcMap.getMap().then((map) => {
+        /**
+        * Initialize pwc map controls with given map instance
+        */
+        pwcMapControls.initialize({ map: map.instance })
+      });
     });
+
     pwcMapControls.addEventListener("saved", (data) => { console.log(data) });
   </script>
 </body>
