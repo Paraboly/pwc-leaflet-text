@@ -7,9 +7,9 @@
 
 ## Properties
 
-| Property | Attribute | Description | Type  | Default     |
-| -------- | --------- | ----------- | ----- | ----------- |
-| `map`    | `map`     |             | `any` | `undefined` |
+| Property | Attribute | Description | Type                               | Default     |
+| -------- | --------- | ----------- | ---------------------------------- | ----------- |
+| `config` | --        |             | `{ map: Map; controls?: Object; }` | `undefined` |
 
 
 ## Events
@@ -38,6 +38,16 @@ Type: `Promise<any>`
 #### Returns
 
 Type: `Promise<any>`
+
+
+
+### `initialize(config: { map: L.Map; controls?: {}; }) => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
 
 
 

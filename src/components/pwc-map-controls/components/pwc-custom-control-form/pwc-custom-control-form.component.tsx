@@ -14,7 +14,8 @@ import PWCUtils from "../../../../core/utils.service";
 
 @Component({
   tag: "pwc-custom-control-form",
-  styleUrls: ["./pwc-custom-control-form.css"]
+  styleUrls: ["./pwc-custom-control-form.css"],
+  shadow: true
 })
 export class PWCCustomControlFormComponent {
   @Element() elem: HTMLElement;
@@ -57,7 +58,7 @@ export class PWCCustomControlFormComponent {
       { id: "slider-padding", model: "padding" }
     ];
     sliders.map(slider => {
-      var ps = this.elem.querySelector(`#${slider.id}`);
+      var ps = this.elem.shadowRoot.querySelector(`#${slider.id}`);
       ps.addEventListener(
         "value-change",
         PWCUtils.partial(callback, slider.model)

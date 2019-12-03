@@ -59,7 +59,10 @@ abstract class PWCMapControlsService {
       "leaflet-bar leaflet-control pwc-custom-control"
     );
 
-    controlButton.innerHTML = `<pwc-tooltip tooltip-alignment="right" tooltip-text="${cfg.tooltipText}" tooltip-source="${cfg.icon}"></pwc-tooltip>`;
+    controlButton.innerHTML = `
+      <a>
+        <pwc-tooltip tooltip-alignment="right" tooltip-text="${cfg.tooltipText}" tooltip-source="${cfg.icon}"></pwc-tooltip>
+      </a>`;
 
     this.registerEventListeners(controlButton, cfg, map);
 

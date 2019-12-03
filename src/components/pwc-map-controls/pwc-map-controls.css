@@ -1,17 +1,29 @@
 pwc-map-controls .guide {
   position: absolute;
-  left: 10px;
-  top: 200px;
-  max-width: 200px;
+  left: 50px;
+  top: 10px;
   background: #fff;
   padding: 15px;
   border-radius: 3px;
   z-index: 999;
+  width: 200px;
 }
 
 pwc-map-controls pwc-custom-control-form {
   position: absolute;
-  left: 10px;
+  left: 50px;
   z-index: 999;
-  top: 200px;
+  top: 10px;
+}
+
+.leaflet-container.crosshair-cursor-enabled {
+  cursor: crosshair;
+}
+
+.leaflet-control-fullscreen > a {
+  background: #fff
+    url(https://s3.us-east-2.amazonaws.com/upload-icon/uploads/icons/png/2921098611555936706-256.png)
+    no-repeat 0 0;
+  background-position: right 3px top 3px;
+  background-size: 20px;
 }

@@ -6,7 +6,7 @@
   width: 100%;
 }
 
-.pwc-map-container .leaflet-control {
+/* .pwc-map-container .leaflet-control {
   background-color: #ffffff;
   background-position: 50% 50%;
   background-repeat: no-repeat;
@@ -28,10 +28,6 @@
   line-height: 13px;
 }
 
-.leaflet-container.crosshair-cursor-enabled {
-  cursor: crosshair;
-}
-
 .pwc-custom-control pwc-ibox {
   position: absolute;
   top: -3px;
@@ -45,4 +41,4 @@
 control-marker-template {
   display: flex;
   position: relative;
-}
+} */

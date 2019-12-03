@@ -26,12 +26,16 @@
     height: 100%;
     width: 100%;
   }
+
+  .pwc-custom-control pwc-tooltip {
+    line-height: 38px;
+  }
 </style>
 
 <body>
   <pwc-map>
-    <pwc-map-controls></pwc-map-controls>
   </pwc-map>
+  <pwc-map-controls></pwc-map-controls>
 
   <script>
     const pwcMapControls = document.querySelector("pwc-map-controls");

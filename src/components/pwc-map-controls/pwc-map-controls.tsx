@@ -8,9 +8,14 @@ import {
   EventEmitter
 } from "@stencil/core";
 import L from "leaflet";
+import "leaflet-draw";
+import "leaflet-fullscreen/dist/Leaflet.fullscreen.min";
+
 import PWC_MAP_CONTROLS_CONSTANT from "./pwc-map-controls.constant";
 import PWCUtils from "../../core/utils.service";
 import PWCMap from "../pwc-map/services/pwc-map.model";
+
+//import <script type="module"src="https://unpkg.com/@paraboly/pwc-tooltip@latest/dist/pwc-tooltip/pwc-tooltip.esm.js"></script>
 
 @Component({
   tag: "pwc-map-controls",
@@ -42,6 +47,11 @@ export class PwcMapControls {
    */
   private registerControls() {
     /**
+     * Register native controls
+     */
+    this.controlsGroup.push(new L.Control["Fullscreen"]());
+    this.controlsGroup.push(L.control.scale({ metric: true, imperial: false }));
+    /**
      * For each default custom control
      */
     PWC_MAP_CONTROLS_CONSTANT.DEFAULT_CUSTOM_CONTROLS.map(controlName => {
@@ -66,10 +76,6 @@ export class PwcMapControls {
         this.map.controls.create(controlName, controlConfig)
       );
     });
-    /**
-     * Register native controls
-     */
-    this.controlsGroup.push(L.control.scale({ metric: true, imperial: false }));
   }
 
   private onControlTriggered(controlConfig) {

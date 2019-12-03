@@ -63,8 +63,6 @@ export class PWCTextControl implements PWCCustomControl {
 
   onFormSubmitted(payload) {
     const geojson = this.pin.instance.toGeoJSON();
-    console.log(this.pin.instance._icon.firstChild.firstChild);
-    console.log(this.pin.instance._icon.firstChild.firstChild.style.transform);
     payload.detail.shapeProps.transform = this.pin.instance._icon.firstChild.firstChild.style.transform;
     geojson.properties = payload.detail;
 

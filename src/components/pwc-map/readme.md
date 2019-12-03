@@ -12,11 +12,18 @@
 | `config` | --        | Config for the map to be initialized | `Object` | `undefined` |
 
 
+## Events
+
+| Event            | Description | Type               |
+| ---------------- | ----------- | ------------------ |
+| `mapInitialized` |             | `CustomEvent<any>` |
+
+
 ## Methods
 
 ### `getMap() => Promise<any>`
 
-
+Allow to get map instance from pwc-map element
 
 #### Returns
 

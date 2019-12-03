@@ -25,7 +25,7 @@
 
 ### Used by
 
- - [pwc-text-control](../../../../pwc-custom-controls/text-control)
+ - [pwc-text-control](../pwc-custom-controls/text-control)
 
 ### Depends on
 

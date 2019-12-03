@@ -25,7 +25,7 @@
 
 ### Depends on
 
-- [pwc-custom-control-form](../../pwc-map-controls/components/pwc-custom-control/pwc-custom-control-form)
+- [pwc-custom-control-form](../../pwc-custom-control-form)
 
 ### Graph
 ```mermaid
