@@ -1,0 +1,28 @@
+[rotatable-element] {
+  position: absolute;
+  display: inline-block;
+}
+
+[rotation-point] {
+  position: absolute;
+  right: 0;
+  bottom: 5px;
+  left: 5px;
+  text-align: center;
+  cursor: alias;
+  outline: none;
+  line-height: 0;
+}
+
+[rotatable-element] > textarea {
+  margin-bottom: 5px;
+  box-sizing: border-box;
+  resize: none;
+  background: #fff;
+  color: inherit;
+  cursor: move;
+  text-align: center;
+  border: none;
+  border-radius: 3px;
+  line-height: 16px;
+}
