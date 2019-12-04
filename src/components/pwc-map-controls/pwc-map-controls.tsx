@@ -9,13 +9,12 @@ import {
 } from "@stencil/core";
 import L from "leaflet";
 import "leaflet-draw";
+import "leaflet.browser.print/dist/leaflet.browser.print";
 import "leaflet-fullscreen/dist/Leaflet.fullscreen.min";
 
 import PWC_MAP_CONTROLS_CONSTANT from "./pwc-map-controls.constant";
 import PWCUtils from "../../core/utils.service";
 import PWCMap from "../pwc-map/services/pwc-map.model";
-
-//import <script type="module"src="https://unpkg.com/@paraboly/pwc-tooltip@latest/dist/pwc-tooltip/pwc-tooltip.esm.js"></script>
 
 @Component({
   tag: "pwc-map-controls",
@@ -51,6 +50,8 @@ export class PwcMapControls {
      */
     this.controlsGroup.push(new L.Control["Fullscreen"]());
     this.controlsGroup.push(L.control.scale({ metric: true, imperial: false }));
+    this.controlsGroup.push(L.control["browserPrint"]());
+
     /**
      * For each default custom control
      */
