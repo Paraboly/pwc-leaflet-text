@@ -49,13 +49,15 @@ export class PWCCustomControlFormComponent {
   }
 
   setShapeStyle() {
-    this.shape.instance._icon.firstElementChild["styles"] = {
-      color: this.fontColor,
-      fontSize: this.fontSize + "px",
-      width: this.width + "px",
-      padding: this.padding + "px",
-      backgroundColor: this.bgColor
-    };
+    if (this.shape.instance._icon.firstElementChild) {
+      this.shape.instance._icon.firstElementChild["styles"] = {
+        color: this.fontColor,
+        fontSize: this.fontSize + "px",
+        width: this.width + "px",
+        padding: this.padding + "px",
+        backgroundColor: this.bgColor
+      };
+    }
   }
 
   registerSliderEventListeners(callback) {

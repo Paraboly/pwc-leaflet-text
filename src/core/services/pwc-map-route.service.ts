@@ -3,7 +3,7 @@ let viaPoints = []
 let routePoints = [];
 let latestMarker, globalMap;
 
-export abstract class PWCMapRoutingService {
+export default abstract class PWCMapRoutingService {
 
   public static onStart(map) {
     globalMap = map;
@@ -30,12 +30,12 @@ export abstract class PWCMapRoutingService {
 
   public static onMarkerClick(event) {
     if (latestMarker.settings.latlng === event.latlng && viaPoints.length > 1) {
-      this.onStop();
+      // this.onStop();
     }
   }
 
-  public static onStop() {
-    console.log(this.getRoute(routePoints))
+  public static onStop(selectedPoints) {
+    console.log(this.getRoute(selectedPoints))
     const oldViaPoints = viaPoints;
     viaPoints = [];
     this.removePointsOnMap(oldViaPoints)

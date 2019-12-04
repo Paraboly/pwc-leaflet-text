@@ -49,6 +49,11 @@ export namespace Components {
   interface PwcMapMarker {
     'config': {};
   }
+  interface PwcRulerControl {
+    'form': any;
+    'map': any;
+    'shape': any;
+  }
   interface PwcTextControl {
     'form': any;
     'map': any;
@@ -89,6 +94,12 @@ declare global {
     new (): HTMLPwcMapMarkerElement;
   };
 
+  interface HTMLPwcRulerControlElement extends Components.PwcRulerControl, HTMLStencilElement {}
+  var HTMLPwcRulerControlElement: {
+    prototype: HTMLPwcRulerControlElement;
+    new (): HTMLPwcRulerControlElement;
+  };
+
   interface HTMLPwcTextControlElement extends Components.PwcTextControl, HTMLStencilElement {}
   var HTMLPwcTextControlElement: {
     prototype: HTMLPwcTextControlElement;
@@ -100,6 +111,7 @@ declare global {
     'pwc-map': HTMLPwcMapElement;
     'pwc-map-controls': HTMLPwcMapControlsElement;
     'pwc-map-marker': HTMLPwcMapMarkerElement;
+    'pwc-ruler-control': HTMLPwcRulerControlElement;
     'pwc-text-control': HTMLPwcTextControlElement;
   }
 }
@@ -127,6 +139,12 @@ declare namespace LocalJSX {
   interface PwcMapMarker {
     'config'?: {};
   }
+  interface PwcRulerControl {
+    'form'?: any;
+    'map'?: any;
+    'onSave'?: (event: CustomEvent<any>) => void;
+    'shape'?: any;
+  }
   interface PwcTextControl {
     'form'?: any;
     'map'?: any;
@@ -140,6 +158,7 @@ declare namespace LocalJSX {
     'pwc-map': PwcMap;
     'pwc-map-controls': PwcMapControls;
     'pwc-map-marker': PwcMapMarker;
+    'pwc-ruler-control': PwcRulerControl;
     'pwc-text-control': PwcTextControl;
   }
 }
@@ -155,6 +174,7 @@ declare module "@stencil/core" {
       'pwc-map': LocalJSX.PwcMap & JSXBase.HTMLAttributes<HTMLPwcMapElement>;
       'pwc-map-controls': LocalJSX.PwcMapControls & JSXBase.HTMLAttributes<HTMLPwcMapControlsElement>;
       'pwc-map-marker': LocalJSX.PwcMapMarker & JSXBase.HTMLAttributes<HTMLPwcMapMarkerElement>;
+      'pwc-ruler-control': LocalJSX.PwcRulerControl & JSXBase.HTMLAttributes<HTMLPwcRulerControlElement>;
       'pwc-text-control': LocalJSX.PwcTextControl & JSXBase.HTMLAttributes<HTMLPwcTextControlElement>;
     }
   }

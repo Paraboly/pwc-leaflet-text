@@ -20,8 +20,20 @@ const PWC_MAP_CONTROLS_CONSTANT = {
     RulerControl: {
       controlName: "RulerControl",
       template: "<pwc-custom-control-form/>",
+      component: "pwc-ruler-control",
       icon: "https://www.svgrepo.com/show/193018/ruler.svg",
-      tooltipText: "Uzunluk ölç"
+      tooltipText: "Uzunluk ölç",
+      params: {
+        form: {
+          title: "Etiket Düzenle",
+          fontSize: 16,
+          angle: 90,
+          width: 120,
+          padding: 5,
+          fontColor: "#4b4b4b",
+          bgColor: "#f2efe9"
+        }
+      }
     },
     CutControl: {
       controlName: "CutControl",
