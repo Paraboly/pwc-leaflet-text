@@ -5,7 +5,8 @@ import {
   h,
   Prop,
   Event,
-  EventEmitter
+  EventEmitter,
+  Listen
 } from "@stencil/core";
 import L from "leaflet";
 import "leaflet-draw";
@@ -16,13 +17,19 @@ import PWC_MAP_CONTROLS_CONSTANT from "./pwc-map-controls.constant";
 import PWCUtils from "../../core/utils.service";
 import PWCMap from "../pwc-map/services/pwc-map.model";
 
+enum ACTIONS {
+  SAVE = "save",
+  CANCELED = "canceled",
+  DELETED = "deleted"
+}
+
 @Component({
   tag: "pwc-map-controls",
   styleUrl: "pwc-map-controls.css"
 })
 export class PwcMapControls {
   private map: PWCMap;
-  @Event() saved: EventEmitter;
+  @Event() actions: EventEmitter;
   @Prop() config: { map: L.Map; controls?: Object };
   @State() activeControl = null;
   /**
@@ -101,9 +108,9 @@ export class PwcMapControls {
     });
   }
 
-  onFormSave(event) {
-    this.cancelActiveControl();
-    this.saved.emit(event.detail);
+  onAction(action: ACTIONS = ACTIONS.CANCELED, event = { detail: {} }) {
+    this.activeControl = null;
+    this.actions.emit({ action, data: event.detail });
   }
 
   /**
@@ -132,20 +139,25 @@ export class PwcMapControls {
     return Promise.resolve(this.controlsGroup);
   }
 
+  @Listen("formActions")
+  onFormActions(event) {
+    this.onAction(event.detail.action, { detail: event.detail.data });
+  }
+
   @Method()
   async cancelActiveControl(): Promise<any> {
-    this.activeControl = null;
-    return Promise.resolve();
+    return this.onAction(ACTIONS.CANCELED, { detail: this.activeControl });
   }
 
   render() {
     return (
       this.activeControl && (
-        <this.activeControl.component
-          form={this.activeControl.params.form}
-          map={this.map}
-          onSave={this.onFormSave.bind(this)}
-        />
+        <div>
+          <this.activeControl.component map={this.map} />
+          <pwc-custom-control-form
+            form={this.activeControl.params.form}
+          ></pwc-custom-control-form>
+        </div>
       )
     );
   }

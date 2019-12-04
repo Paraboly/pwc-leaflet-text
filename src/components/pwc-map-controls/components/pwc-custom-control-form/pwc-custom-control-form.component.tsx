@@ -5,12 +5,24 @@ import {
   Element,
   State,
   Event,
-  EventEmitter
+  EventEmitter,
+  Method
 } from "@stencil/core";
 import "@polymer/paper-slider/paper-slider.js";
 import "@paraboly/pwc-ibox";
 import PWCCustomControlForm from "./pwc-custom-control-form.model";
 import PWCUtils from "../../../../core/utils.service";
+
+enum ACTIONS {
+  SAVE = "save",
+  CANCELED = "canceled",
+  DELETED = "deleted"
+}
+
+enum STATES {
+  UNINITIALIZED,
+  INITIALIZED
+}
 
 @Component({
   tag: "pwc-custom-control-form",
@@ -18,11 +30,11 @@ import PWCUtils from "../../../../core/utils.service";
   shadow: true
 })
 export class PWCCustomControlFormComponent {
+  private shape: any;
   @Element() elem: HTMLElement;
-  @Event() formSubmitted: EventEmitter;
-  @Event() formCanceled: EventEmitter;
+  @Event() formActions: EventEmitter;
   @Prop() form: any;
-  @Prop() shape: any;
+  @State() formState: STATES = STATES.UNINITIALIZED;
   @State() fontSize;
   @State() width;
   @State() padding;
@@ -34,11 +46,6 @@ export class PWCCustomControlFormComponent {
     Object.keys(this.form.shapeProps).map(
       key => (this[key] = this.form.shapeProps[key])
     );
-  }
-
-  componentDidLoad() {
-    this.registerSliderEventListeners(this.onFormValuesChanged.bind(this));
-    this.setShapeStyle();
   }
 
   setShapeStyle() {
@@ -81,97 +88,118 @@ export class PWCCustomControlFormComponent {
       padding: this.padding + "px",
       backgroundColor: this.bgColor
     };
-    this.formSubmitted.emit(this.form.forServer());
+    this.formActions.emit({
+      action: ACTIONS.SAVE,
+      data: this.form.forServer()
+    });
+  }
+
+  onDelete(e) {
+    e.preventDefault();
+    this.formActions.emit({ action: ACTIONS.DELETED, data: this.form });
   }
 
   onCancel(e) {
     e.preventDefault();
-    this.formCanceled.emit();
+    this.formActions.emit({ action: ACTIONS.CANCELED, data: this.form });
+  }
+
+  @Method()
+  initialize(shape: any) {
+    this.formState = STATES.INITIALIZED;
+    this.shape = shape;
+
+    setTimeout(() => {
+      this.registerSliderEventListeners(this.onFormValuesChanged.bind(this));
+      this.setShapeStyle();
+    });
   }
 
   render() {
     return (
-      <pwc-ibox>
-        <pwc-ibox-title>{this.form.title}</pwc-ibox-title>
-        <pwc-ibox-content>
-          <form>
-            <div class="form-group">
-              <label>Font: </label>
-              <paper-slider
-                id="slider-font-size"
-                pin
-                snaps
-                max="40"
-                max-markers="20"
-                step="1"
-                value={this.fontSize}
-              ></paper-slider>
-            </div>
-            <div class="form-group">
-              <label>Genişlik: </label>
-              <paper-slider
-                id="slider-width"
-                pin
-                snaps
-                max="400"
-                max-markers="10"
-                step="4"
-                value={this.width}
-              ></paper-slider>
-            </div>
-            <div class="form-group">
-              <label>Hücre Boşluğu: </label>
-              <paper-slider
-                id="slider-padding"
-                pin
-                snaps
-                max="25"
-                max-markers="10"
-                step="5"
-                value={this.padding}
-              ></paper-slider>
-            </div>
-            <div class="form-group">
-              <label>Yazı Rengi: </label>
-              <input
-                type="color"
-                name="font-color-picker"
-                id="font-color-picker"
-                value={this.fontColor}
-                onChange={PWCUtils.partial(
-                  this.onFormValuesChanged.bind(this),
-                  "fontColor"
-                )}
-              />
-            </div>
-            <div class="form-group">
-              <label>Arkaplan: </label>
-              <input
-                type="color"
-                name="bg-color-picker"
-                id="bg-color-picker"
-                value={this.bgColor}
-                onChange={PWCUtils.partial(
-                  this.onFormValuesChanged.bind(this),
-                  "bgColor"
-                )}
-              />
-            </div>
-          </form>
-        </pwc-ibox-content>
-        <pwc-ibox-footer>
-          <input
-            type="button"
-            value="Iptal"
-            onClick={this.onCancel.bind(this)}
-          />
-          <input
-            type="button"
-            value="Kaydet"
-            onClick={this.onSubmit.bind(this)}
-          />
-        </pwc-ibox-footer>
-      </pwc-ibox>
+      this.formState === STATES.INITIALIZED && (
+        <pwc-ibox>
+          <pwc-ibox-title>{this.form.title}</pwc-ibox-title>
+          <pwc-ibox-content>
+            <form>
+              <div class="form-group">
+                <label>Font: </label>
+                <paper-slider
+                  id="slider-font-size"
+                  pin
+                  snaps
+                  max="40"
+                  max-markers="20"
+                  step="1"
+                  value={this.fontSize}
+                ></paper-slider>
+              </div>
+              <div class="form-group">
+                <label>Genişlik: </label>
+                <paper-slider
+                  id="slider-width"
+                  pin
+                  snaps
+                  max="400"
+                  max-markers="10"
+                  step="4"
+                  value={this.width}
+                ></paper-slider>
+              </div>
+              <div class="form-group">
+                <label>Hücre Boşluğu: </label>
+                <paper-slider
+                  id="slider-padding"
+                  pin
+                  snaps
+                  max="25"
+                  max-markers="10"
+                  step="5"
+                  value={this.padding}
+                ></paper-slider>
+              </div>
+              <div class="form-group">
+                <label>Yazı Rengi: </label>
+                <input
+                  type="color"
+                  name="font-color-picker"
+                  id="font-color-picker"
+                  value={this.fontColor}
+                  onChange={PWCUtils.partial(
+                    this.onFormValuesChanged.bind(this),
+                    "fontColor"
+                  )}
+                />
+              </div>
+              <div class="form-group">
+                <label>Arkaplan: </label>
+                <input
+                  type="color"
+                  name="bg-color-picker"
+                  id="bg-color-picker"
+                  value={this.bgColor}
+                  onChange={PWCUtils.partial(
+                    this.onFormValuesChanged.bind(this),
+                    "bgColor"
+                  )}
+                />
+              </div>
+            </form>
+          </pwc-ibox-content>
+          <pwc-ibox-footer>
+            <input
+              type="button"
+              value="Iptal"
+              onClick={this.onCancel.bind(this)}
+            />
+            <input
+              type="button"
+              value="Kaydet"
+              onClick={this.onSubmit.bind(this)}
+            />
+          </pwc-ibox-footer>
+        </pwc-ibox>
+      )
     );
   }
 }

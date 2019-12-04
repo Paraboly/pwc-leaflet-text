@@ -56,7 +56,7 @@
       });
     });
 
-    pwcMapControls.addEventListener("saved", (data) => { console.log(data) });
+    pwcMapControls.addEventListener("actions", (payload) => { console.log(payload.detail.action); console.log(payload.detail.data) });
   </script>
 </body>
 

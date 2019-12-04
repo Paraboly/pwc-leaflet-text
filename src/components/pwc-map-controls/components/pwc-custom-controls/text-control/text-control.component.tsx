@@ -2,6 +2,7 @@ import { Component, Prop, State, h, Event, EventEmitter } from "@stencil/core";
 import PWCCustomControl from "../pwc-custom-control.interface";
 import L from "leaflet";
 import { PWCMapMarkerFactory } from "../../../../pwc-map-marker/services/pwc-map-marker.factory";
+import PWCMapControlsService from "../../../services/pwc-map-controls.service";
 enum STATES {
   POINT_DETECTION,
   SHOW_FORM
@@ -57,36 +58,18 @@ export class PWCTextControl implements PWCCustomControl {
       });
 
       this.pin.instance.addTo(this.map.instance);
-      this.state = STATES.SHOW_FORM;
+
+      PWCMapControlsService.initializeForm(this.pin);
     });
   }
 
-  onFormSubmitted(payload) {
-    const geojson = this.pin.instance.toGeoJSON();
-    payload.detail.shapeProps.transform = this.pin.instance._icon.firstChild.firstChild.style.transform;
-    geojson.properties = payload.detail;
-
-    this.save.emit(geojson);
-
-    this.map.instance.removeLayer(this.pin.instance);
-  }
-
-  onFormCanceled() {
-    document.body.querySelector("pwc-map-controls")["cancelActiveControl"]();
-  }
-
   render() {
-    return this.state === STATES.POINT_DETECTION ? (
-      <div class="guide">
-        📍 Etiket koymak istediginiz noktaya cift tiklayin
+    return (
+      <div>
+        <div class="guide">
+          📍 Etiket koymak istediginiz noktaya cift tiklayin
+        </div>
       </div>
-    ) : (
-      <pwc-custom-control-form
-        form={this.form}
-        shape={this.pin}
-        onFormSubmitted={this.onFormSubmitted.bind(this)}
-        onFormCanceled={this.onFormCanceled.bind(this)}
-      ></pwc-custom-control-form>
     );
   }
 }

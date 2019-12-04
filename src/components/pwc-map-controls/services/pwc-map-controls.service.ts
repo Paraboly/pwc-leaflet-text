@@ -107,6 +107,11 @@ abstract class PWCMapControlsService {
 
     formComponent["form"] = formProps;
   }
+
+  public static initializeForm(shape) {
+    const pwcMapControls = document.querySelector("pwc-custom-control-form");
+    pwcMapControls["initialize"](shape);
+  }
 }
 
 export default PWCMapControlsService;
