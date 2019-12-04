@@ -105,7 +105,7 @@ export class PWCCustomControlFormComponent {
   }
 
   @Method()
-  initialize(shape: any) {
+  async initialize(shape: any) {
     this.formState = STATES.INITIALIZED;
     this.shape = shape;
 

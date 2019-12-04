@@ -10,22 +10,33 @@
 | Property | Attribute | Description | Type  | Default     |
 | -------- | --------- | ----------- | ----- | ----------- |
 | `form`   | `form`    |             | `any` | `undefined` |
-| `shape`  | `shape`   |             | `any` | `undefined` |
 
 
 ## Events
 
-| Event           | Description | Type               |
-| --------------- | ----------- | ------------------ |
-| `formCanceled`  |             | `CustomEvent<any>` |
-| `formSubmitted` |             | `CustomEvent<any>` |
+| Event         | Description | Type               |
+| ------------- | ----------- | ------------------ |
+| `formActions` |             | `CustomEvent<any>` |
+
+
+## Methods
+
+### `initialize(shape: any) => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
 
 
 ## Dependencies
 
 ### Used by
 
- - [pwc-text-control](../pwc-custom-controls/text-control)
+ - [pwc-map-controls](../..)
 
 ### Depends on
 
@@ -41,7 +52,7 @@ graph TD;
   pwc-custom-control-form --> pwc-ibox-title
   pwc-custom-control-form --> pwc-ibox-content
   pwc-custom-control-form --> pwc-ibox-footer
-  pwc-text-control --> pwc-custom-control-form
+  pwc-map-controls --> pwc-custom-control-form
   style pwc-custom-control-form fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
