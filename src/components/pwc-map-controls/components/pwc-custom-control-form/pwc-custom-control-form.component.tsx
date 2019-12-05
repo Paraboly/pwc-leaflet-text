@@ -60,7 +60,7 @@ export class PWCCustomControlFormComponent {
     }
   }
 
-  registerSliderEventListeners(callback) {
+  registerEventListersAndCallbacks(callback) {
     const sliders = [
       { id: "slider-font-size", model: "fontSize" },
       { id: "slider-width", model: "width" },
@@ -72,6 +72,24 @@ export class PWCCustomControlFormComponent {
         "value-change",
         PWCUtils.partial(callback, slider.model)
       );
+    });
+
+    const fontColorPicker = this.elem.shadowRoot.querySelector(
+      "#font-color-picker"
+    );
+    fontColorPicker.addEventListener("colorPickedEvent", event => {
+      // event.preventDefault();
+      // this.fontColor = event["detail"];
+      // this.setShapeStyle();
+    });
+    const bgColorPicker = this.elem.shadowRoot.querySelector(
+      "#bg-color-picker"
+    );
+    bgColorPicker.addEventListener("colorPickedEvent", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      this.bgColor = event["detail"];
+      this.setShapeStyle();
     });
   }
 
@@ -112,7 +130,9 @@ export class PWCCustomControlFormComponent {
     this.shape = shape;
 
     setTimeout(() => {
-      this.registerSliderEventListeners(this.onFormValuesChanged.bind(this));
+      this.registerEventListersAndCallbacks(
+        this.onFormValuesChanged.bind(this)
+      );
       this.setShapeStyle();
     });
   }
@@ -162,29 +182,17 @@ export class PWCCustomControlFormComponent {
               </div>
               <div class="form-group">
                 <label>Yazı Rengi: </label>
-                <input
-                  type="color"
-                  name="font-color-picker"
+                <color-picker
                   id="font-color-picker"
-                  value={this.fontColor}
-                  onChange={PWCUtils.partial(
-                    this.onFormValuesChanged.bind(this),
-                    "fontColor"
-                  )}
-                />
+                  colors='["#750D37","#38405F","#ee6123","#9A8873", "#66999B"]'
+                ></color-picker>
               </div>
               <div class="form-group">
                 <label>Arkaplan: </label>
-                <input
-                  type="color"
-                  name="bg-color-picker"
+                <color-picker
                   id="bg-color-picker"
-                  value={this.bgColor}
-                  onChange={PWCUtils.partial(
-                    this.onFormValuesChanged.bind(this),
-                    "bgColor"
-                  )}
-                />
+                  colors='["#750D37","#38405F","#ee6123","#9A8873", "#66999B"]'
+                ></color-picker>
               </div>
             </form>
           </pwc-ibox-content>

@@ -1,38 +1,44 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"
+    />
+    <title>PWC Map Starter</title>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
-  <title>PWC Map Starter</title>
+    <script type="module" src="/build/pwc-leaflet-text.esm.js"></script>
+    <script nomodule src="/build/pwc-leaflet-text.js"></script>
+    <script
+      type="module"
+      src="https://unpkg.com/@paraboly/pwc-tooltip@latest/dist/pwc-tooltip/pwc-tooltip.esm.js"
+    ></script>
 
-  <script type="module" src="/build/pwc-leaflet-text.esm.js"></script>
-  <script nomodule src="/build/pwc-leaflet-text.js"></script>
-  <script type="module"
-    src="https://unpkg.com/@paraboly/pwc-tooltip@latest/dist/pwc-tooltip/pwc-tooltip.esm.js"></script>
+    <script
+      type="module"
+      src="https://unpkg.com/@paraboly/pwc-color-picker@latest/dist/pwc-color-picker/pwc-color-picker.esm.js"
+    ></script>
+  </head>
+  <style>
+    body {
+      background-color: #eee;
+      margin: 0 auto;
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
 
-</head>
-<style>
-  body {
-    background-color: #eee;
-    margin: 0 auto;
-    padding: 0;
-    height: 100vh;
-    overflow: hidden;
-  }
+    pwc-map {
+      display: block;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
 
-  pwc-map {
-    display: block;
-    height: 100%;
-    width: 100%;
-  }
-</style>
-
-<body>
-  <pwc-map>
-    <pwc-map-controls></pwc-map-controls>
-  </pwc-map>
-
-</body>
-
+  <body>
+    <pwc-map>
+      <pwc-map-controls></pwc-map-controls>
+    </pwc-map>
+  </body>
 </html>
