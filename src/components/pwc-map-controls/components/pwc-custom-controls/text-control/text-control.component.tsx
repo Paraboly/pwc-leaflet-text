@@ -16,10 +16,11 @@ export class PWCTextControl implements PWCCustomControl {
   @Event() save: EventEmitter;
   @State() state: STATES = STATES.POINT_DETECTION;
   @Prop() map;
-  @Prop() shape;
+  @Prop() geometry: L.GeoJSON;
   @Prop() form;
 
   componentDidLoad() {
+    console.log(this.geometry);
     this.detectPoint();
   }
 

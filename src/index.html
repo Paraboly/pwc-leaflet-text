@@ -35,10 +35,16 @@
 <body>
   <pwc-map>
   </pwc-map>
-  <pwc-map-controls></pwc-map-controls>
+  <pwc-map-controls>
+
+  </pwc-map-controls>
 
   <script>
+    const secondShape = { "type": "label", "shapeProps": { name: "METU", "fontSize": 16, "angle": 90, "width": 120, "padding": 5, "fontColor": "#4b4b4b", "bgColor": "#f2efe9" }, "created": "2019-12-04T21:20:06.986Z", "updated": "2019-12-04T21:21:56.679Z", "geometry": { "type": "Feature", "properties": { name: "Metu", "color": "#686928", "fontSize": "11px", "width": "184px", "padding": "5px", "backgroundColor": "#cfe3c5" }, "geometry": { "type": "Point", "coordinates": [32.76123, 39.888665] } } };
+    const firstShape = { "type": "label", "shapeProps": { name: "Ankara", "fontSize": 16, "angle": 90, "width": 120, "padding": 5, "fontColor": "#4b4b4b", "bgColor": "#f2efe9" }, "created": "2019-12-04T21:17:41.862Z", "updated": "2019-12-04T21:17:46.905Z", "geometry": { "type": "Feature", "properties": { name: "Ankara", "color": "#4b4b4b", "fontSize": "16px", "width": "120px", "padding": "5px", "backgroundColor": "#f2efe9" }, "geometry": { "type": "Point", "coordinates": [32.653427, 39.992378] } } };
+
     const pwcMapControls = document.querySelector("pwc-map-controls");
+    const geometry = [firstShape.geometry, secondShape.geometry];
     /**
     * We should wait till the web component ready
     */
@@ -52,11 +58,11 @@
         /**
         * Initialize pwc map controls with given map instance
         */
-        pwcMapControls.initialize({ map: map.instance })
+        pwcMapControls.initialize({ map: map.instance }, geometry);
       });
     });
 
-    pwcMapControls.addEventListener("actions", (payload) => { console.log(payload.detail.action); console.log(payload.detail.data) });
+    pwcMapControls.addEventListener("actions", (payload) => { console.log(payload.detail.action); console.log(JSON.stringify(payload.detail.data)) });
   </script>
 </body>
 

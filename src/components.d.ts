@@ -44,7 +44,7 @@ export namespace Components {
     * @returns List of registered control
     * @memberof PwcMapControls
     */
-    'initialize': (config: { map: L.Map; controls?: {}; }) => Promise<void>;
+    'initialize': (config: { map: L.Map; controls?: {}; }, geometry: any) => Promise<void>;
   }
   interface PwcMapMarker {
     'config': {};
@@ -56,8 +56,8 @@ export namespace Components {
   }
   interface PwcTextControl {
     'form': any;
+    'geometry': L.GeoJSON;
     'map': any;
-    'shape': any;
   }
 }
 
@@ -147,9 +147,9 @@ declare namespace LocalJSX {
   }
   interface PwcTextControl {
     'form'?: any;
+    'geometry'?: L.GeoJSON;
     'map'?: any;
     'onSave'?: (event: CustomEvent<any>) => void;
-    'shape'?: any;
   }
 
   interface IntrinsicElements {

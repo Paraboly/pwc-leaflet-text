@@ -83,13 +83,17 @@ export class PWCCustomControlFormComponent {
 
   onSubmit(e) {
     e.preventDefault();
-    this.form.shapeProps = {
+    const geometry = this.shape.instance.toGeoJSON();
+    geometry.properties = {
       color: this.fontColor,
       fontSize: this.fontSize + "px",
       width: this.width + "px",
       padding: this.padding + "px",
       backgroundColor: this.bgColor
     };
+
+    this.form.geometry = geometry;
+
     this.formActions.emit({
       action: ACTIONS.SAVE,
       data: this.form.forServer()

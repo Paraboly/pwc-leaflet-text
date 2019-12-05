@@ -16,6 +16,7 @@ import "leaflet-fullscreen/dist/Leaflet.fullscreen.min";
 import PWC_MAP_CONTROLS_CONSTANT from "./pwc-map-controls.constant";
 import PWCUtils from "../../core/utils.service";
 import PWCMap from "../pwc-map/services/pwc-map.model";
+import PWCMapMarker from "../pwc-map-marker/services/pwc-map-marker.model";
 
 enum ACTIONS {
   SAVE = "save",
@@ -29,6 +30,8 @@ enum ACTIONS {
 })
 export class PwcMapControls {
   private map: PWCMap;
+  private geometry: any = [];
+  private shapeMap: any;
   @Event() actions: EventEmitter;
   @Prop() config: { map: L.Map; controls?: Object };
   @State() activeControl = null;
@@ -42,7 +45,7 @@ export class PwcMapControls {
      * If map instance given with config, initialize map controls
      */
     if (this.config && this.config.map) {
-      this.initialize(this.config);
+      this.initialize(this.config, this.geometry);
     }
   }
 
@@ -119,12 +122,17 @@ export class PwcMapControls {
    * @memberof PwcMapControls
    */
   @Method()
-  async initialize(config: { map: L.Map; controls?: {} }) {
+  async initialize(config: { map: L.Map; controls?: {} }, geometry: any) {
     if (!(config && config.map)) {
       throw new Error("Map configuration not given.");
     }
+
+    this.geometry = geometry;
+
     this.controlsGroup = [];
     this.map = new PWCMap({}, config.map);
+
+    this.renderGeometries(geometry);
     this.registerControls();
     this.addControlsToMap();
   }
@@ -147,6 +155,41 @@ export class PwcMapControls {
   @Method()
   async cancelActiveControl(): Promise<any> {
     return this.onAction(ACTIONS.CANCELED, { detail: this.activeControl });
+  }
+
+  renderGeometries(geometry) {
+    this.shapeMap = geometry
+      .concat(geometry)
+      .reduce(
+        (entryMap, e) =>
+          entryMap.set(e.geometry.type, [
+            ...(entryMap.get(e.geometry.type) || []),
+            e
+          ]),
+        new Map()
+      );
+
+    let drawingLayers = {};
+
+    for (let [type, geometry] of this.shapeMap) {
+      if (type === "Point") {
+        drawingLayers[type] = new L.GeoJSON(geometry, {
+          pointToLayer: function(feature, latlng) {
+            return new PWCMapMarker({
+              latlng,
+              template: `<pwc-editable-text text="${feature.properties.name}" color="${feature.properties.color}"/>`,
+              options: { draggable: false }
+            }).instance;
+          }
+        });
+      } else {
+        drawingLayers[type] = new L.GeoJSON(geometry);
+      }
+    }
+
+    Object.keys(drawingLayers).forEach(shapeType => {
+      this.map.instance.addLayer(drawingLayers[shapeType]);
+    });
   }
 
   render() {

@@ -15,7 +15,8 @@ const PWC_MAP_CONTROLS_CONSTANT = {
         }
       },
       icon: "https://www.svgrepo.com/show/14960/text-box.svg",
-      tooltipText: "Etiket ekle"
+      tooltipText: "Etiket ekle",
+      type: "Point"
     },
     RulerControl: {
       controlName: "RulerControl",
