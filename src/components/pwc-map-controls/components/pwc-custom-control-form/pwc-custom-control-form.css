@@ -24,6 +24,11 @@ pwc-ibox-content .form-group input {
   flex: 1;
 }
 
+pwc-ibox-content .color-group {
+  margin-left: -5px;
+  margin-right: -23px;
+}
+
 .ibox-footer {
   display: flex;
   justify-content: space-around;

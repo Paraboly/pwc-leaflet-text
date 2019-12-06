@@ -78,9 +78,10 @@ export class PWCCustomControlFormComponent {
       "#font-color-picker"
     );
     fontColorPicker.addEventListener("colorPickedEvent", event => {
-      // event.preventDefault();
-      // this.fontColor = event["detail"];
-      // this.setShapeStyle();
+      event.preventDefault();
+      event.stopPropagation();
+      this.fontColor = event["detail"];
+      this.setShapeStyle();
     });
     const bgColorPicker = this.elem.shadowRoot.querySelector(
       "#bg-color-picker"
@@ -180,21 +181,25 @@ export class PWCCustomControlFormComponent {
                   value={this.padding}
                 ></paper-slider>
               </div>
-              <div class="form-group">
-                <label>Yazı Rengi: </label>
-                <color-picker
-                  id="font-color-picker"
-                  colors='["#750D37","#38405F","#ee6123","#9A8873", "#66999B"]'
-                ></color-picker>
-              </div>
-              <div class="form-group">
-                <label>Arkaplan: </label>
-                <color-picker
-                  id="bg-color-picker"
-                  colors='["#750D37","#38405F","#ee6123","#9A8873", "#66999B"]'
-                ></color-picker>
-              </div>
             </form>
+            <div class="form-group">
+              <label>Yazı Rengi: </label>
+              <color-picker
+                class="color-group"
+                id="font-color-picker"
+                colors='["#38405F","transparent","#ee6123","#ffee11"]'
+                activeColor="#ffffff"
+              ></color-picker>
+            </div>
+            <div class="form-group">
+              <label>Arkaplan: </label>
+              <color-picker
+                id="bg-color-picker"
+                class="color-group"
+                colors='["#38885F","#38405F","#ee6123","#6235dd"]'
+                activeColor="#ffffff"
+              ></color-picker>
+            </div>
           </pwc-ibox-content>
           <pwc-ibox-footer>
             <input
