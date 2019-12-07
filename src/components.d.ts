@@ -51,8 +51,8 @@ export namespace Components {
   }
   interface PwcRulerControl {
     'form': any;
+    'geometry': any;
     'map': any;
-    'shape': any;
   }
   interface PwcTextControl {
     'form': any;
@@ -141,9 +141,9 @@ declare namespace LocalJSX {
   }
   interface PwcRulerControl {
     'form'?: any;
+    'geometry'?: any;
     'map'?: any;
     'onSave'?: (event: CustomEvent<any>) => void;
-    'shape'?: any;
   }
   interface PwcTextControl {
     'form'?: any;

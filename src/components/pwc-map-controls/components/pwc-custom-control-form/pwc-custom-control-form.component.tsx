@@ -67,11 +67,13 @@ export class PWCCustomControlFormComponent {
       { id: "slider-padding", model: "padding" }
     ];
     sliders.map(slider => {
-      var ps = this.elem.shadowRoot.querySelector(`#${slider.id}`);
-      ps.addEventListener(
-        "value-change",
-        PWCUtils.partial(callback, slider.model)
-      );
+      setTimeout(() => {
+        const ps = this.elem.shadowRoot.querySelector(`#${slider.id}`);
+        ps.addEventListener(
+          "value-change",
+          PWCUtils.partial(callback, slider.model)
+        );
+      });
     });
   }
 

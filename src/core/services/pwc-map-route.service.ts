@@ -1,10 +1,9 @@
-import { PWCMapMarkerFactory } from '../../components/pwc-map-marker/services/pwc-map-marker.factory';
-let viaPoints = []
+import { PWCMapMarkerFactory } from "../../components/pwc-map-marker/services/pwc-map-marker.factory";
+let viaPoints = [];
 let routePoints = [];
 let latestMarker, globalMap;
 
 export default abstract class PWCMapRoutingService {
-
   public static onStart(map) {
     globalMap = map;
     map.instance.on("click", event => {
@@ -17,15 +16,13 @@ export default abstract class PWCMapRoutingService {
         options: { draggable: true }
       });
       const parent = this;
-      latestMarker.instance.on('click', function (e) {
+      latestMarker.instance.on("click", function(e) {
         e.originalEvent.stopPropagation();
-        parent.onMarkerClick(e)
+        parent.onMarkerClick(e);
       });
       latestMarker.instance.addTo(map.instance);
       viaPoints.push(latestMarker.instance);
-
     });
-
   }
 
   public static onMarkerClick(event) {
@@ -35,14 +32,14 @@ export default abstract class PWCMapRoutingService {
   }
 
   public static onStop(selectedPoints) {
-    console.log(this.getRoute(selectedPoints))
+    console.log(this.getRoute(selectedPoints));
     const oldViaPoints = viaPoints;
     viaPoints = [];
-    this.removePointsOnMap(oldViaPoints)
+    this.removePointsOnMap(oldViaPoints);
   }
 
   private static removePointsOnMap(oldViaPoints) {
-    globalMap.instance.eachLayer(function (layer) {
+    globalMap.instance.eachLayer(function(layer) {
       if (oldViaPoints.includes(layer)) {
         globalMap.instance.removeLayer(layer);
       }
@@ -61,12 +58,11 @@ export default abstract class PWCMapRoutingService {
   public static getRoute(coordinates) {
     return this.prepareQuery(coordinates);
     // return { map, boundingbox, duration };
-
   }
 
   /**
    *
-   * @description prepares query string  
+   * @description prepares query string
    * @private
    * @static
    * @param {*} coordinates
@@ -76,9 +72,11 @@ export default abstract class PWCMapRoutingService {
   private static prepareQuery(coordinates) {
     let wayPoints;
     coordinates.forEach((coordinate, index) => {
-      wayPoints = wayPoints ? wayPoints + coordinate.lng + '%2C' + coordinate.lat : coordinate.lng + '%2C' + coordinate.lat;
+      wayPoints = wayPoints
+        ? wayPoints + coordinate.lng + "%2C" + coordinate.lat
+        : coordinate.lng + "%2C" + coordinate.lat;
       if (coordinates[index + 1]) {
-        wayPoints = wayPoints + '%7C'
+        wayPoints = wayPoints + "%7C";
       }
     });
 
@@ -87,7 +85,7 @@ export default abstract class PWCMapRoutingService {
 
   /**
    *
-   * @description get routes from osm 
+   * @description get routes from osm
    * @private
    * @static
    * @param {*} wayPoints
@@ -96,10 +94,10 @@ export default abstract class PWCMapRoutingService {
   private static async createRouteFromOSM(wayPoints): Promise<any> {
     const api = `https://api.openrouteservice.org/directions?api_key=5b3ce3597851110001cf6248d532e3f61c1c4b9aae10167c3efd47ec&coordinates=${wayPoints}&geometry=true&geometry_format=geojson&language=en-US&preference=fastest&profile=driving-car&units=m`;
 
-    fetch(api)
+    return fetch(api)
       .then((response: Response) => response.json())
       .then(response => {
-        console.log(response.routes[0].summary.distance)
+        console.log(response.routes[0].summary.distance);
         return response.routes[0];
       });
   }

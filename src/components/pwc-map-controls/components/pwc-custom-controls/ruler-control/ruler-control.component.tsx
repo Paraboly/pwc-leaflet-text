@@ -3,9 +3,9 @@ import PWCCustomControl from "../pwc-custom-control.interface";
 import L from "leaflet";
 import { PWCMapMarkerFactory } from "../../../../pwc-map-marker/services/pwc-map-marker.factory";
 import PWCMapControlsService from "../../../services/pwc-map-controls.service";
-import PWCMapRoutingService from '../../../../../core/services/pwc-map-route.service';
+import PWCMapRoutingService from "../../../../../core/services/pwc-map-route.service";
 
-let viaPoints = []
+let viaPoints = [];
 let routePoints = [];
 let latestMarker;
 
@@ -21,7 +21,7 @@ export class PWCRulerControl implements PWCCustomControl {
   @Event() save: EventEmitter;
   @State() state: STATES = STATES.POINT_DETECTION;
   @Prop() map;
-  @Prop() shape;
+  @Prop() geometry;
   @Prop() form;
 
   componentDidLoad() {
@@ -29,8 +29,8 @@ export class PWCRulerControl implements PWCCustomControl {
   }
 
   componentDidUnload() {
-    this.removePointsOnMap(viaPoints)
-    this.map.instance.off("click")
+    this.removePointsOnMap(viaPoints);
+    this.map.instance.off("click");
     L.DomUtil.removeClass(
       this.map.instance["_container"],
       "crosshair-cursor-enabled"
@@ -46,17 +46,25 @@ export class PWCRulerControl implements PWCCustomControl {
   }
 
   onStop() {
-    console.log(PWCMapRoutingService.getRoute(routePoints));
-    PWCMapControlsService.initializeForm(latestMarker)
+    PWCMapRoutingService.getRoute(routePoints).then(route => {
+      this.geometry = new L.GeoJSON(route.geometry, {
+        onEachFeature: function(feature, layer) {
+          layer.bindTooltip(route.summary.distance.toString()).openTooltip();
+        }
+      });
+      this.geometry.addTo(this.map.instance);
+    });
+    PWCMapControlsService.initializeForm(latestMarker);
   }
 
   removePointsOnMap(oldViaPoints) {
     const ctrl = this;
-    this.map.instance.eachLayer(function (layer) {
+    this.map.instance.eachLayer(function(layer) {
       if (oldViaPoints.includes(layer)) {
         ctrl.map.instance.removeLayer(layer);
       }
     });
+    this.map.instance.removeLayer(this.geometry);
   }
 
   detectPoint() {
@@ -80,56 +88,50 @@ export class PWCRulerControl implements PWCCustomControl {
         options: { draggable: true }
       });
       const ctrl = this;
-      latestMarker.instance.on('click', function (e) {
+      latestMarker.instance.on("click", function(e) {
         e.originalEvent.stopPropagation();
-        ctrl.onMarkerClick(e)
+        ctrl.onMarkerClick(e);
       });
       latestMarker.instance.addTo(this.map.instance);
       viaPoints.push(latestMarker.instance);
-
     });
-
-
   }
 
   render() {
     return (
       <div>
         <div class="guide">
-          📍 Çizmek istediğiniz yolun başlangıç ve bitiş noktalarını haritaya çift tıklayarak belirleyin.
+          📍 Çizmek istediğiniz yolun başlangıç ve bitiş noktalarını haritaya
+          çift tıklayarak belirleyin.
         </div>
       </div>
     );
   }
 }
 
+// this.map.instance.on("click", event => {
+//   this.map.instance.doubleClickZoom.enable();
 
+//   L.DomUtil.removeClass(
+//     this.map.instance["_container"],
+//     "crosshair-cursor-enabled"
+//   );
 
+//   this.pin = PWCMapMarkerFactory.getOne({
+//     latlng: event["latlng"],
+//     template: "<pwc-editable-text/>",
+//     options: { draggable: true }
+//   });
 
+//   this.pin.instance.on("dragstart", () => {
+//     this.map.instance.dragging.disable();
+//   });
 
- // this.map.instance.on("click", event => {
-    //   this.map.instance.doubleClickZoom.enable();
+//   this.pin.instance.on("dragend", () => {
+//     this.map.instance.dragging.enable();
+//   });
 
-    //   L.DomUtil.removeClass(
-    //     this.map.instance["_container"],
-    //     "crosshair-cursor-enabled"
-    //   );
+//   this.pin.instance.addTo(this.map.instance);
 
-    //   this.pin = PWCMapMarkerFactory.getOne({
-    //     latlng: event["latlng"],
-    //     template: "<pwc-editable-text/>",
-    //     options: { draggable: true }
-    //   });
-
-    //   this.pin.instance.on("dragstart", () => {
-    //     this.map.instance.dragging.disable();
-    //   });
-
-    //   this.pin.instance.on("dragend", () => {
-    //     this.map.instance.dragging.enable();
-    //   });
-
-    //   this.pin.instance.addTo(this.map.instance);
-
-    //   PWCMapControlsService.initializeForm(this.pin);
-    // });
+//   PWCMapControlsService.initializeForm(this.pin);
+// });
