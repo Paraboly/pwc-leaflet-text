@@ -28,10 +28,16 @@ export class PWCEditableTextComponent {
     PWCEditableService.registerRotateAbility(rotatableElement, rotationPoint);
   }
 
-  updateTextHeight(event) {
-    var matches = event.target.value.match(/\n/g);
-    var breaks = matches ? matches.length + 1 : 1;
-    event.target.setAttribute("rows", breaks.toString());
+  focusText(e) {
+    const text = e.target;
+    text.contentEditable = true;
+    text.focus();
+    PWCEditableService.placeCaretAtEnd(text);
+
+    text.addEventListener("focusout", function onFocus() {
+      text.contentEditable = false;
+      text.removeEventListener("focusout", onFocus);
+    });
   }
 
   render() {
@@ -40,15 +46,13 @@ export class PWCEditableTextComponent {
         <span rotation-point class="rotatable">
           📍
         </span>
-        <textarea
-          rows={1}
-          style={this.styles}
-          value={this.text}
-          placeholder="Metin giriniz..."
-          class="form-control"
-          onKeyUp={this.updateTextHeight}
-          onInput={event => this.handleChange(event)}
-        />
+        <div
+          id="content"
+          spellcheck="false"
+          onClick={this.focusText.bind(this)}
+        >
+          {this.text}
+        </div>
       </div>
     );
   }

@@ -14,8 +14,8 @@
   line-height: 0;
 }
 
-[rotatable-element] > textarea {
-  margin-bottom: 5px;
+[rotatable-element] > #content {
+  margin-bottom: 15px;
   box-sizing: border-box;
   resize: none;
   background: #fff;
@@ -25,4 +25,7 @@
   border: none;
   border-radius: 3px;
   line-height: 16px;
+  resize: both;
+  overflow: auto;
+  min-width: 100px;
 }
