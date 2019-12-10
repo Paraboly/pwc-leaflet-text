@@ -4,10 +4,7 @@ import L from "leaflet";
 import { PWCMapMarkerFactory } from "../../../../pwc-map-marker/services/pwc-map-marker.factory";
 import PWCMapControlsService from "../../../services/pwc-map-controls.service";
 import PWCMapRoutingService from "../../../../../core/services/pwc-map-route.service";
-
-let viaPoints = [];
-let routePoints = [];
-let latestMarker;
+import PWCMapMarker from "../../../../pwc-map-marker/services/pwc-map-marker.model";
 
 enum STATES {
   POINT_DETECTION,
@@ -18,43 +15,54 @@ enum STATES {
   styleUrls: []
 })
 export class PWCRulerControl implements PWCCustomControl {
+  private viaPoints: PWCMapMarker[];
+  private routePoints: Array<[number, number]>;
+  private lastMarker: PWCMapMarker;
   @Event() save: EventEmitter;
   @State() state: STATES = STATES.POINT_DETECTION;
   @Prop() map;
   @Prop() geometry;
   @Prop() form;
 
+  constructor() {
+    this.viaPoints = [];
+    this.routePoints = [];
+  }
+
   componentDidLoad() {
     this.detectPoint();
   }
 
-  componentDidUnload() {
-    this.removePointsOnMap(viaPoints);
-    this.map.instance.off("click");
-    L.DomUtil.removeClass(
-      this.map.instance["_container"],
-      "crosshair-cursor-enabled"
-    );
-    viaPoints = [];
-  }
-
   onMarkerClick(event) {
-    if (latestMarker.settings.latlng === event.latlng && viaPoints.length > 1) {
+    if (
+      this.lastMarker.settings.latlng === event.latlng &&
+      this.viaPoints.length > 1
+    ) {
       this.state = STATES.SHOW_FORM;
       this.onStop();
     }
   }
 
+  onDrag() {}
+
   onStop() {
-    PWCMapRoutingService.getRoute(routePoints).then(route => {
+    PWCMapRoutingService.getRoute(this.routePoints).then(route => {
       this.geometry = new L.GeoJSON(route.geometry, {
-        onEachFeature: function(feature, layer) {
+        onEachFeature: function(_feature, layer) {
           layer.bindTooltip(route.summary.distance.toString()).openTooltip();
         }
       });
       this.geometry.addTo(this.map.instance);
     });
-    PWCMapControlsService.initializeForm(latestMarker);
+
+    PWCMapControlsService.initializeForm(this.lastMarker);
+
+    L.DomUtil.removeClass(
+      this.map.instance["_container"],
+      "crosshair-cursor-enabled"
+    );
+
+    this.map.instance.off("click");
   }
 
   removePointsOnMap(oldViaPoints) {
@@ -64,36 +72,34 @@ export class PWCRulerControl implements PWCCustomControl {
         ctrl.map.instance.removeLayer(layer);
       }
     });
+
     this.map.instance.removeLayer(this.geometry);
   }
 
   detectPoint() {
+    if (this.state === STATES.SHOW_FORM) {
+      return;
+    }
     L.DomUtil.addClass(
       this.map.instance["_container"],
       "crosshair-cursor-enabled"
     );
 
-    if (this.state === STATES.SHOW_FORM) {
-      return;
-    }
-
-    this.map.instance.doubleClickZoom.disable();
-    this.map.instance.on("click", event => {
-      setTimeout(() => this.map.instance.doubleClickZoom.enable());
-
-      routePoints.push(event["latlng"]);
-      latestMarker = PWCMapMarkerFactory.getOne({
+    this.map.instance.on("click", (event: { latlng: [number, number] }) => {
+      this.routePoints.push(event.latlng);
+      this.lastMarker = PWCMapMarkerFactory.getOne({
         latlng: event["latlng"],
-        template: "🌑",
+        template: `<i>${this.viaPoints.length + 1}</i>🌑`,
         options: { draggable: true }
       });
+
       const ctrl = this;
-      latestMarker.instance.on("click", function(e) {
+      this.lastMarker.instance.on("click", function(e) {
         e.originalEvent.stopPropagation();
         ctrl.onMarkerClick(e);
       });
-      latestMarker.instance.addTo(this.map.instance);
-      viaPoints.push(latestMarker.instance);
+      this.lastMarker.instance.addTo(this.map.instance);
+      this.viaPoints.push(this.lastMarker.instance);
     });
   }
 
@@ -108,30 +114,3 @@ export class PWCRulerControl implements PWCCustomControl {
     );
   }
 }
-
-// this.map.instance.on("click", event => {
-//   this.map.instance.doubleClickZoom.enable();
-
-//   L.DomUtil.removeClass(
-//     this.map.instance["_container"],
-//     "crosshair-cursor-enabled"
-//   );
-
-//   this.pin = PWCMapMarkerFactory.getOne({
-//     latlng: event["latlng"],
-//     template: "<pwc-editable-text/>",
-//     options: { draggable: true }
-//   });
-
-//   this.pin.instance.on("dragstart", () => {
-//     this.map.instance.dragging.disable();
-//   });
-
-//   this.pin.instance.on("dragend", () => {
-//     this.map.instance.dragging.enable();
-//   });
-
-//   this.pin.instance.addTo(this.map.instance);
-
-//   PWCMapControlsService.initializeForm(this.pin);
-// });
