@@ -157,8 +157,8 @@ export class PwcMapControls {
 
   @Listen("formActions")
   onFormActions(event) {
-    console.log("formActions from pwc map controls");
-    this.onAction(event.detail.action, { detail: event.detail.data });
+    if (event.detail.action !== "changed")
+      this.onAction(event.detail.action, { detail: event.detail.data });
   }
 
   render() {

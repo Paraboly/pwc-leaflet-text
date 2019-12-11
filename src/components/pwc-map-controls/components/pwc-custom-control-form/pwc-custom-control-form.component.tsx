@@ -15,7 +15,8 @@ import PWCUtils from "../../../../core/utils.service";
 enum ACTIONS {
   SAVE = "save",
   CANCELED = "canceled",
-  DELETED = "deleted"
+  DELETED = "deleted",
+  CHANGED = "changed"
 }
 
 enum STATES {
@@ -61,28 +62,25 @@ export class PWCCustomControlFormComponent {
           "value-change",
           PWCUtils.partial(callback, slider.model)
         );
-      });
+      }, 1000);
     });
   }
 
   onFormValuesChanged(model, e) {
     e.preventDefault();
-    this[model] = e.target.value;
-    //this.setShapeStyle();
+    this.form.shapeProps[model] =
+      typeof e.target.value === "number"
+        ? e.target.value + "px"
+        : e.target.value;
+
+    this.formActions.emit({
+      action: ACTIONS.CHANGED,
+      data: this.form.forServer()
+    });
   }
 
   onSubmit(e) {
     e.preventDefault();
-    // const geometry = this.shape.instance.toGeoJSON();
-    // geometry.properties = {
-    //   color: this.fontColor,
-    //   fontSize: this.fontSize + "px",
-    //   width: this.width + "px",
-    //   padding: this.padding + "px",
-    //   backgroundColor: this.bgColor
-    // };
-
-    // this.form.geometry = geometry;
 
     this.formActions.emit({
       action: ACTIONS.SAVE,
@@ -104,15 +102,10 @@ export class PWCCustomControlFormComponent {
   async initialize(form: any) {
     this.form = new PWCCustomControlForm(form);
     this.formState = STATES.INITIALIZED;
-    console.log(this.form);
-    setTimeout(() => {
-      this.registerSliderEventListeners(this.onFormValuesChanged.bind(this));
-      //this.setShapeStyle();
-    });
+    this.registerSliderEventListeners(this.onFormValuesChanged.bind(this));
   }
 
   render() {
-    console.log("control form: ", this.form);
     return (
       this.formState === STATES.INITIALIZED && (
         <pwc-ibox>
@@ -143,7 +136,7 @@ export class PWCCustomControlFormComponent {
                   max="400"
                   max-markers="10"
                   step="4"
-                  value={this.form.shapeProps.width}
+                  value={this.form.shapeProps.width || 100}
                 ></paper-slider>
               </div>
               <div class="form-group">
@@ -155,7 +148,7 @@ export class PWCCustomControlFormComponent {
                   max="25"
                   max-markers="10"
                   step="5"
-                  value={this.form.shapeProps.padding}
+                  value={this.form.shapeProps.padding || 5}
                 ></paper-slider>
               </div>
               <div class="form-group">
@@ -167,7 +160,7 @@ export class PWCCustomControlFormComponent {
                   value={this.form.shapeProps.color}
                   onChange={PWCUtils.partial(
                     this.onFormValuesChanged.bind(this),
-                    "fontColor"
+                    "color"
                   )}
                 />
               </div>
@@ -180,7 +173,7 @@ export class PWCCustomControlFormComponent {
                   value={this.form.shapeProps.backgroundColor}
                   onChange={PWCUtils.partial(
                     this.onFormValuesChanged.bind(this),
-                    "bgColor"
+                    "backgroundColor"
                   )}
                 />
               </div>
