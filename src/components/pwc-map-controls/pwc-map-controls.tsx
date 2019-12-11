@@ -102,9 +102,16 @@ export class PwcMapControls {
     });
   }
 
-  onAction(action: ACTIONS = ACTIONS.CANCELED, event = { detail: {} }) {
-    if (action === "save" || action === "deleted")
-      this.actions.emit({ action, data: event.detail });
+  onAction(action: ACTIONS = ACTIONS.CANCELED, event: any) {
+    if (action === "save" || action === "deleted") {
+      debugger;
+      const control = this.element.querySelector(event.detail.pwcProps.control);
+      control.getActiveShape().then(shape => {
+        let shapeData = shape.instance ? shape.instance.toGeoJSON() : shape.toGeoJSON();
+        shapeData.properties = event.detail
+        this.actions.emit({ action, data: shapeData, control });
+      })
+    }
   }
 
   /**
@@ -155,7 +162,6 @@ export class PwcMapControls {
   render() {
     return (
       <div>
-        this.controlsGroup && (
         {this.controlsGroup.map((control: any) => {
           if (control.options.details) {
             const geometry = this.shapeMap.get(
@@ -170,7 +176,6 @@ export class PwcMapControls {
           }
           return null;
         })}
-        )
         <pwc-custom-control-form />
       </div>
     );

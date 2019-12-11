@@ -52,10 +52,13 @@ export namespace Components {
   interface PwcRulerControl {
     'form': any;
     'geometry': any;
+    'getActiveShape': () => Promise<any>;
     'map': any;
+    'shapeLayergeometry': any;
   }
   interface PwcTextControl {
     'geometry': any;
+    'getActiveShape': () => Promise<any>;
     'map': any;
   }
 }
@@ -143,6 +146,7 @@ declare namespace LocalJSX {
     'geometry'?: any;
     'map'?: any;
     'onSave'?: (event: CustomEvent<any>) => void;
+    'shapeLayergeometry'?: any;
   }
   interface PwcTextControl {
     'geometry'?: any;

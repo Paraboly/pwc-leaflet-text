@@ -1,4 +1,4 @@
-import { Component, Prop, State, h } from "@stencil/core";
+import { Component, Prop, State, h, Method } from "@stencil/core";
 import PWCCustomControl from "../pwc-custom-control.interface";
 import L from "leaflet";
 import { PWCMapMarkerFactory } from "../../../../pwc-map-marker/services/pwc-map-marker.factory";
@@ -33,10 +33,6 @@ export class PWCTextControl implements PWCCustomControl {
     this.renderShapes();
   }
 
-  componentDidUnload() {
-    this.map.instance.removeLayer(this.activeShape.instance);
-  }
-
   renderShapes() {
     this.shapeLayer = new L.GeoJSON(this.geometry, {
       pointToLayer: (feature, latlng) => {
@@ -67,7 +63,8 @@ export class PWCTextControl implements PWCCustomControl {
         backgroundColor: "#dddddd"
       },
       pwcProps: {
-        type: "PwcTextControl"
+        type: "PwcTextControl",
+        control: "pwc-text-control"
       }
     };
 
@@ -133,7 +130,7 @@ export class PWCTextControl implements PWCCustomControl {
   _generateTextMarker(latlng, properties, editable = false) {
     const template = `<pwc-editable-text text="${
       properties.name
-    }" text-options=${JSON.stringify(properties)} editable="${editable}">`;
+      }" text-options=${JSON.stringify(properties)} editable="${editable}">`;
 
     const marker = PWCMapMarkerFactory.getOne({
       latlng: latlng,
@@ -148,6 +145,11 @@ export class PWCTextControl implements PWCCustomControl {
     });
 
     return marker;
+  }
+
+  @Method()
+  async getActiveShape() {
+    return this.activeShape;
   }
 
   render() {

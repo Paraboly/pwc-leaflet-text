@@ -12,6 +12,7 @@ class PWCCustomControlForm {
   };
   pwcProps: {
     type: string;
+    control: string;
     created?: string;
     updated?: string;
   };

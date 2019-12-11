@@ -17,25 +17,26 @@ const PWC_MAP_CONTROLS_CONSTANT = {
       icon: "https://www.svgrepo.com/show/14960/text-box.svg",
       tooltipText: "Etiket ekle",
       type: "Point"
+    },
+    PWCRulerControl: {
+      controlName: "RulerControl",
+      template: "<pwc-custom-control-form/>",
+      component: "pwc-ruler-control",
+      icon: "https://www.svgrepo.com/show/193018/ruler.svg",
+      tooltipText: "Uzunluk ölç",
+      params: {
+        form: {
+          title: "Etiket Düzenle",
+          fontSize: 16,
+          angle: 90,
+          width: 120,
+          padding: 5,
+          fontColor: "#4b4b4b",
+          bgColor: "#f2efe9"
+        }
+      },
+      type: "LineString"
     }
-    // RulerControl: {
-    //   controlName: "RulerControl",
-    //   template: "<pwc-custom-control-form/>",
-    //   component: "pwc-ruler-control",
-    //   icon: "https://www.svgrepo.com/show/193018/ruler.svg",
-    //   tooltipText: "Uzunluk ölç",
-    //   params: {
-    //     form: {
-    //       title: "Etiket Düzenle",
-    //       fontSize: 16,
-    //       angle: 90,
-    //       width: 120,
-    //       padding: 5,
-    //       fontColor: "#4b4b4b",
-    //       bgColor: "#f2efe9"
-    //     }
-    //   }
-    // },
     // CutControl: {
     //   controlName: "CutControl",
     //   template: "<pwc-map-cut-control/>",
@@ -43,7 +44,7 @@ const PWC_MAP_CONTROLS_CONSTANT = {
     //   tooltipText: "Kırp"
     // }
   },
-  DEFAULT_CUSTOM_CONTROLS: ["PwcTextControl"],
+  DEFAULT_CUSTOM_CONTROLS: ["PwcTextControl", "PWCRulerControl"],
   DEFAULT_CONTROL_CONFIG: {
     position: "topleft"
   }
