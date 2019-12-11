@@ -1,19 +1,32 @@
 import PWCEditableService from "./pwc-editable.service";
-import { Component, Prop, h, State, Element } from "@stencil/core";
+import { Component, Prop, h, Element, State, Event } from "@stencil/core";
 @Component({
   tag: "pwc-editable-text",
   styleUrls: ["./pwc-editable-text.css"]
 })
 export class PWCEditableTextComponent {
+  private options: { [key: string]: string } = {};
   @Element() element: HTMLElement;
+  @State() active: boolean = true;
   @Prop() text?: string = "Ornek Etiket";
-  @Prop() styles;
-  @State() angle: string = "0";
-  @State() margin: string = "10";
-  @State() padding: string = "10";
+  @Prop() textOptions: string;
+  @Event()
+  change;
 
   handleChange(event) {
     this.text = event.target.value;
+  }
+
+  componentWillLoad() {
+    this.textOptions =
+      typeof this.textOptions === "string" ? JSON.parse(this.textOptions) : {};
+
+    this.options = this.textOptions as any;
+
+    // Register ElementID if it is new one
+    this.options.elementId = this.options.elementId
+      ? this.options.elementId
+      : new Date().valueOf().toString();
   }
 
   componentDidLoad() {
@@ -50,6 +63,7 @@ export class PWCEditableTextComponent {
           id="content"
           spellcheck="false"
           onClick={this.focusText.bind(this)}
+          style={this.textOptions as any}
         >
           {this.text}
         </div>

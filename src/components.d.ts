@@ -11,12 +11,11 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 export namespace Components {
   interface PwcCustomControlForm {
-    'form': any;
-    'initialize': (shape: any) => Promise<void>;
+    'initialize': (form: any, shape: any) => Promise<void>;
   }
   interface PwcEditableText {
-    'styles': any;
     'text'?: string;
+    'textOptions': string;
   }
   interface PwcMap {
     /**
@@ -31,7 +30,6 @@ export namespace Components {
     'getMap': () => Promise<any>;
   }
   interface PwcMapControls {
-    'cancelActiveControl': () => Promise<any>;
     'config': { map: L.Map; controls?: Object };
     /**
     * @description Get registered controls
@@ -55,8 +53,7 @@ export namespace Components {
     'map': any;
   }
   interface PwcTextControl {
-    'form': any;
-    'geometry': L.GeoJSON;
+    'geometry': any;
     'map': any;
   }
 }
@@ -118,12 +115,12 @@ declare global {
 
 declare namespace LocalJSX {
   interface PwcCustomControlForm {
-    'form'?: any;
     'onFormActions'?: (event: CustomEvent<any>) => void;
   }
   interface PwcEditableText {
-    'styles'?: any;
+    'onChange'?: (event: CustomEvent<any>) => void;
     'text'?: string;
+    'textOptions'?: string;
   }
   interface PwcMap {
     /**
@@ -146,8 +143,7 @@ declare namespace LocalJSX {
     'onSave'?: (event: CustomEvent<any>) => void;
   }
   interface PwcTextControl {
-    'form'?: any;
-    'geometry'?: L.GeoJSON;
+    'geometry'?: any;
     'map'?: any;
     'onSave'?: (event: CustomEvent<any>) => void;
   }

@@ -3,29 +3,54 @@ import PWCCustomControl from "../pwc-custom-control.interface";
 import L from "leaflet";
 import { PWCMapMarkerFactory } from "../../../../pwc-map-marker/services/pwc-map-marker.factory";
 import PWCMapControlsService from "../../../services/pwc-map-controls.service";
+import PWCMapMarker from "../../../../pwc-map-marker/services/pwc-map-marker.model";
+
 enum STATES {
-  POINT_DETECTION,
-  SHOW_FORM
+  IDLE,
+  POINT_DETECTION
 }
 @Component({
   tag: "pwc-text-control",
   styleUrls: []
 })
 export class PWCTextControl implements PWCCustomControl {
-  private pin;
+  private activeShape;
+  private shapeLayer: L.GeoJSON;
   @Event() save: EventEmitter;
-  @State() state: STATES = STATES.POINT_DETECTION;
+  @State() state: STATES = STATES.IDLE;
   @Prop() map;
-  @Prop() geometry: L.GeoJSON;
-  @Prop() form;
+  @Prop() geometry;
 
   componentDidLoad() {
-    console.log(this.geometry);
-    this.detectPoint();
+    this.renderShapes();
+
+    PWCMapControlsService.initializeForm({}, this.activeShape);
+    PWCMapControlsService.registerFormListener(this.onFormAction);
+    //this.detectPoint();
   }
 
   componentDidUnload() {
-    this.map.instance.removeLayer(this.pin.instance);
+    this.map.instance.removeLayer(this.activeShape.instance);
+  }
+
+  renderShapes() {
+    this.shapeLayer = new L.GeoJSON(this.geometry, {
+      pointToLayer: (feature, latlng) => {
+        return new PWCMapMarker({
+          latlng,
+          template: `<pwc-editable-text text="${
+            feature.properties.name
+          }" text-options=${JSON.stringify(feature.properties)} >`,
+          options: { draggable: false }
+        }).instance;
+      }
+    });
+
+    this.map.instance.addLayer(this.shapeLayer);
+  }
+
+  onFormAction(event) {
+    console.log(event.detail);
   }
 
   detectPoint() {
@@ -44,33 +69,33 @@ export class PWCTextControl implements PWCCustomControl {
         "crosshair-cursor-enabled"
       );
 
-      this.pin = PWCMapMarkerFactory.getOne({
+      this.activeShape = PWCMapMarkerFactory.getOne({
         latlng: event["latlng"],
         template: "<pwc-editable-text/>",
         options: { draggable: true }
       });
 
-      this.pin.instance.on("dragstart", () => {
+      this.activeShape.instance.on("dragstart", () => {
         this.map.instance.dragging.disable();
       });
 
-      this.pin.instance.on("dragend", () => {
+      this.activeShape.instance.on("dragend", () => {
         this.map.instance.dragging.enable();
       });
 
-      this.pin.instance.addTo(this.map.instance);
-
-      PWCMapControlsService.initializeForm(this.pin);
+      this.activeShape.instance.addTo(this.map.instance);
     });
   }
 
   render() {
     return (
-      <div>
-        <div class="guide">
-          📍 Etiket koymak istediginiz noktaya cift tiklayin
+      this.state === STATES.POINT_DETECTION && (
+        <div>
+          <div class="guide">
+            📍 Etiket koymak istediginiz noktaya cift tiklayin
+          </div>
         </div>
-      </div>
+      )
     );
   }
 }

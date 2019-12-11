@@ -6,6 +6,7 @@ import {
   Prop,
   Event,
   EventEmitter,
+  Element,
   Listen
 } from "@stencil/core";
 import L from "leaflet";
@@ -16,7 +17,6 @@ import "leaflet-fullscreen/dist/Leaflet.fullscreen.min";
 import PWC_MAP_CONTROLS_CONSTANT from "./pwc-map-controls.constant";
 import PWCUtils from "../../core/utils.service";
 import PWCMap from "../pwc-map/services/pwc-map.model";
-import PWCMapMarker from "../pwc-map-marker/services/pwc-map-marker.model";
 
 enum ACTIONS {
   SAVE = "save",
@@ -31,14 +31,15 @@ enum ACTIONS {
 export class PwcMapControls {
   private map: PWCMap;
   private geometry: any = [];
-  private shapeMap: any;
+  private shapeMap;
   @Event() actions: EventEmitter;
+  @Element() element: Element;
   @Prop() config: { map: L.Map; controls?: Object };
-  @State() activeControl = null;
+  @State() controlsReady = false;
   /**
    * Holds registered controls
    */
-  private controlsGroup: Array<L.Control>;
+  private controlsGroup: Array<L.Control> = [];
 
   componentWillLoad() {
     /**
@@ -90,7 +91,7 @@ export class PwcMapControls {
   }
 
   private onControlTriggered(controlConfig) {
-    this.activeControl = controlConfig;
+    console.log(controlConfig);
   }
 
   /**
@@ -112,7 +113,6 @@ export class PwcMapControls {
   }
 
   onAction(action: ACTIONS = ACTIONS.CANCELED, event = { detail: {} }) {
-    this.activeControl = null;
     this.actions.emit({ action, data: event.detail });
   }
 
@@ -127,14 +127,22 @@ export class PwcMapControls {
       throw new Error("Map configuration not given.");
     }
 
-    this.geometry = geometry;
-
     this.controlsGroup = [];
+    this.geometry = geometry;
     this.map = new PWCMap({}, config.map);
 
-    this.renderGeometries(geometry);
+    this.shapeMap = geometry.reduce(
+      (entryMap, e) =>
+        entryMap.set(e.geometry.type, [
+          ...(entryMap.get(e.geometry.type) || []),
+          e
+        ]),
+      new Map()
+    );
+
     this.registerControls();
     this.addControlsToMap();
+    this.controlsReady = true;
   }
 
   /**
@@ -149,59 +157,31 @@ export class PwcMapControls {
 
   @Listen("formActions")
   onFormActions(event) {
+    console.log("formActions from pwc map controls");
     this.onAction(event.detail.action, { detail: event.detail.data });
-  }
-
-  @Method()
-  async cancelActiveControl(): Promise<any> {
-    return this.onAction(ACTIONS.CANCELED, { detail: this.activeControl });
-  }
-
-  renderGeometries(geometry) {
-    this.shapeMap = geometry
-      .concat(geometry)
-      .reduce(
-        (entryMap, e) =>
-          entryMap.set(e.geometry.type, [
-            ...(entryMap.get(e.geometry.type) || []),
-            e
-          ]),
-        new Map()
-      );
-
-    let drawingLayers = {};
-
-    for (let [type, geometry] of this.shapeMap) {
-      if (type === "Point") {
-        drawingLayers[type] = new L.GeoJSON(geometry, {
-          pointToLayer: function(feature, latlng) {
-            return new PWCMapMarker({
-              latlng,
-              template: `<pwc-editable-text text="${feature.properties.name}" color="${feature.properties.color}"/>`,
-              options: { draggable: false }
-            }).instance;
-          }
-        });
-      } else {
-        drawingLayers[type] = new L.GeoJSON(geometry);
-      }
-    }
-
-    Object.keys(drawingLayers).forEach(shapeType => {
-      this.map.instance.addLayer(drawingLayers[shapeType]);
-    });
   }
 
   render() {
     return (
-      this.activeControl && (
-        <div>
-          <this.activeControl.component map={this.map} />
-          <pwc-custom-control-form
-            form={this.activeControl.params.form}
-          ></pwc-custom-control-form>
-        </div>
-      )
+      <div>
+        this.controlsGroup && (
+        {this.controlsGroup.map((control: any) => {
+          if (control.options.details) {
+            const geometry = this.shapeMap.get(
+              control.options.details.type || "Point"
+            );
+            return (
+              <control.options.details.component
+                map={this.map}
+                geometry={geometry}
+              />
+            );
+          }
+          return null;
+        })}
+        )
+        <pwc-custom-control-form />
+      </div>
     );
   }
 }

@@ -35,7 +35,7 @@ abstract class PWCMapControlsService {
       return new PWCMapCustomControl(opts);
     };
 
-    return new L.Control[controlName]({ position: cfg.position });
+    return new L.Control[controlName]({ position: cfg.position, details: cfg });
   }
 
   /**
@@ -109,9 +109,14 @@ abstract class PWCMapControlsService {
     formComponent["form"] = formProps;
   }
 
-  public static initializeForm(shape: PWCMapMarker) {
+  public static initializeForm(form, shape: PWCMapMarker) {
     const pwcMapControls = document.querySelector("pwc-custom-control-form");
-    pwcMapControls["initialize"](shape);
+    pwcMapControls["initialize"](form, shape);
+  }
+
+  public static registerFormListener(callback) {
+    const customForm = document.querySelector("pwc-custom-control-form");
+    customForm.addEventListener("formActions", callback);
   }
 }
 

@@ -1,6 +1,5 @@
 import {
   Component,
-  Prop,
   h,
   Element,
   State,
@@ -31,9 +30,9 @@ enum STATES {
 })
 export class PWCCustomControlFormComponent {
   private shape: any;
+  private form: PWCCustomControlForm;
   @Element() elem: HTMLElement;
   @Event() formActions: EventEmitter;
-  @Prop() form: any;
   @State() formState: STATES = STATES.UNINITIALIZED;
   @State() fontSize;
   @State() width;
@@ -41,12 +40,7 @@ export class PWCCustomControlFormComponent {
   @State() fontColor;
   @State() bgColor;
 
-  componentWillLoad() {
-    this.form = new PWCCustomControlForm(this.form);
-    Object.keys(this.form.shapeProps).map(
-      key => (this[key] = this.form.shapeProps[key])
-    );
-  }
+  componentWillLoad() {}
 
   setShapeStyle() {
     if (this.shape.instance._icon.firstElementChild) {
@@ -113,13 +107,19 @@ export class PWCCustomControlFormComponent {
   }
 
   @Method()
-  async initialize(shape: any) {
+  async initialize(form, shape: any) {
+    this.form = new PWCCustomControlForm(form);
+
+    Object.keys(this.form.shapeProps).map(
+      key => (this[key] = this.form.shapeProps[key])
+    );
+
     this.formState = STATES.INITIALIZED;
     this.shape = shape;
 
     setTimeout(() => {
       this.registerSliderEventListeners(this.onFormValuesChanged.bind(this));
-      this.setShapeStyle();
+      //this.setShapeStyle();
     });
   }
 

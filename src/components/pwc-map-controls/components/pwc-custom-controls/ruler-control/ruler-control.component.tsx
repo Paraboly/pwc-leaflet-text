@@ -55,7 +55,7 @@ export class PWCRulerControl implements PWCCustomControl {
       this.geometry.addTo(this.map.instance);
     });
 
-    PWCMapControlsService.initializeForm(this.lastMarker);
+    PWCMapControlsService.initializeForm(this.form, this.lastMarker);
 
     L.DomUtil.removeClass(
       this.map.instance["_container"],
