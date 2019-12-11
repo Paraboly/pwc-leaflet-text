@@ -4,17 +4,7 @@ import L from "leaflet";
 import { PWCMapMarkerFactory } from "../../../../pwc-map-marker/services/pwc-map-marker.factory";
 import PWCMapControlsService from "../../../services/pwc-map-controls.service";
 import PWCCustomControlForm from "../../pwc-custom-control-form/pwc-custom-control-form.model";
-
-const defaultTextForm = {
-  name: "ÖrnekEtiket",
-  shapeProps: {
-    fontSize: "12px",
-    backgroundColor: "#dddddd"
-  },
-  pwcProps: {
-    type: "PwcTextControl"
-  }
-};
+import PWCUtils from "../../../../../core/utils.service";
 
 enum STATES {
   IDLE,
@@ -27,8 +17,10 @@ enum STATES {
 })
 export class PWCTextControl implements PWCCustomControl {
   private customControlName = "PwcTextControl";
+  private activeShapeBackup;
   private activeShape;
   private shapeLayer: L.GeoJSON;
+  @Event() edit: EventEmitter;
   @Event() save: EventEmitter;
   @State() state: STATES = STATES.IDLE;
   @Prop() map;
@@ -59,9 +51,11 @@ export class PWCTextControl implements PWCCustomControl {
   }
 
   onControlTriggered() {
-    this.state = STATES.POINT_DETECTION;
+    if (this.state === STATES.IDLE) {
+      this.state = STATES.POINT_DETECTION;
 
-    this.detectPoint();
+      this.detectPoint();
+    }
   }
 
   onFormAction(event) {
@@ -69,6 +63,17 @@ export class PWCTextControl implements PWCCustomControl {
   }
 
   detectPoint() {
+    const defaultTextForm = {
+      name: "ÖrnekEtiket",
+      shapeProps: {
+        fontSize: "12px",
+        backgroundColor: "#dddddd"
+      },
+      pwcProps: {
+        type: "PwcTextControl"
+      }
+    };
+
     L.DomUtil.addClass(
       this.map.instance["_container"],
       "crosshair-cursor-enabled"
@@ -76,50 +81,77 @@ export class PWCTextControl implements PWCCustomControl {
 
     this.map.instance.doubleClickZoom.disable();
 
-    this.map.instance.once("click", event => {
-      const form = new PWCCustomControlForm(defaultTextForm);
-
-      this.map.instance.doubleClickZoom.enable();
-
-      L.DomUtil.removeClass(
-        this.map.instance["_container"],
-        "crosshair-cursor-enabled"
-      );
-
-      this.activeShape = this._generateTextMarker(event.latlng, form);
-
-      this.activeShape.instance.on("dragstart", () => {
-        this.map.instance.dragging.disable();
-      });
-
-      this.activeShape.instance.on("dragend", () => {
-        this.map.instance.dragging.enable();
-      });
-
-      this.activeShape.instance.addTo(this.map.instance);
-
-      PWCMapControlsService.initializeForm(form);
-
-      this.state = STATES.EDIT;
+    this.map.instance.once("click", e => {
+      if (this.state === STATES.POINT_DETECTION)
+        this.editShape(defaultTextForm, e);
     });
   }
 
   goIdle() {
+    this.state = STATES.IDLE;
     this.map.instance.removeLayer(this.activeShape.instance);
     this.activeShape = null;
     PWCMapControlsService.destroyForm();
+
+    if (this.activeShapeBackup) {
+      this.map.instance.addLayer(this.activeShapeBackup);
+    }
   }
 
-  _generateTextMarker(latlng, properties) {
+  editShape(shapeProps, event) {
+    /**
+     *  (Hack: If user edit existing marker, there should be _icon prop.)
+     *  Backup existing marker amd remove the from map
+     **/
+    if (event.target._icon) {
+      this.activeShapeBackup = event.target;
+      this.map.instance.removeLayer(this.activeShapeBackup);
+    }
+
+    const form = new PWCCustomControlForm(shapeProps);
+
+    this.map.instance.doubleClickZoom.enable();
+
+    L.DomUtil.removeClass(
+      this.map.instance["_container"],
+      "crosshair-cursor-enabled"
+    );
+
+    this.activeShape = this._generateTextMarker(event.latlng, form, true);
+
+    this.activeShape.instance.on("dragstart", () => {
+      this.map.instance.dragging.disable();
+    });
+
+    this.activeShape.instance.on("dragend", () => {
+      this.map.instance.dragging.enable();
+    });
+
+    this.activeShape.instance.addTo(this.map.instance);
+
+    PWCMapControlsService.initializeForm(form);
+
+    this.state = STATES.EDIT;
+  }
+
+  _generateTextMarker(latlng, properties, editable = false) {
     const template = `<pwc-editable-text text="${
       properties.name
-    }" text-options=${JSON.stringify(properties)} >`;
+    }" text-options=${JSON.stringify(properties)} editable="${editable}">`;
 
-    return PWCMapMarkerFactory.getOne({
+    const marker = PWCMapMarkerFactory.getOne({
       latlng: latlng,
       template,
-      options: { draggable: true }
+      options: {
+        draggable: editable
+      }
     });
+
+    marker.instance.on("dblclick", e => {
+      if (this.state === STATES.IDLE) this.editShape(properties, e);
+    });
+
+    return marker;
   }
 
   render() {

@@ -13,41 +13,55 @@ enum STATES {
   styleUrls: ["./pwc-editable-text.css"]
 })
 export class PWCEditableTextComponent {
+  private rotatableElement: HTMLElement;
+  private rotationPoint: HTMLElement;
+  private contentElement: HTMLElement;
+
   @Element() element: HTMLElement;
   @State() shapeOptions;
   @State() state: STATES = STATES.UNINITIALIZED;
   @Prop() text?: string = "Ornek Etiket";
   @Prop() textOptions: string | any;
+  @Prop() editable = false;
 
   componentWillLoad() {
     this.textOptions =
       typeof this.textOptions === "string" ? JSON.parse(this.textOptions) : {};
     this.shapeOptions = this.textOptions["shapeProps"];
+
+    if (this.editable) this.state = STATES.EDIT;
   }
 
   componentDidLoad() {
-    const rotatableElement = this.element.querySelector("[rotatable-element]");
-    const rotationPoint = this.element.querySelector("[rotation-point]");
+    this.rotatableElement = this.element.querySelector("[rotatable-element]");
+    this.rotationPoint = this.element.querySelector("[rotation-point]");
+    this.contentElement = this.element.querySelector("#content");
 
-    PWCEditableService.moveElementToCursorPosition(
-      rotatableElement,
-      rotationPoint
-    );
-
-    PWCEditableService.registerRotateAbility(rotatableElement, rotationPoint);
     PWCMapControlsService.registerFormListener(this.onFormAction.bind(this));
+
+    if (this.editable) this.enableEdit();
   }
 
-  focusText(e) {
-    const text = e.target;
-    text.contentEditable = true;
-    text.focus();
-    PWCEditableService.placeCaretAtEnd(text);
+  enableEdit() {
+    if (this.state !== STATES.EDIT) this.state = STATES.EDIT;
 
-    text.addEventListener("focusout", function onFocus() {
-      text.contentEditable = false;
-      text.removeEventListener("focusout", onFocus);
-    });
+    PWCEditableService.registerRotateAbility(
+      this.rotatableElement,
+      this.rotationPoint
+    );
+
+    this.contentElement.contentEditable = "true";
+    this.contentElement.focus();
+    PWCEditableService.placeCaretAtEnd(this.contentElement);
+
+    PWCEditableService.moveElementToCursorPosition(
+      this.rotatableElement,
+      this.rotationPoint
+    );
+  }
+
+  disableEdit() {
+    this.state = STATES.INITIALIZED;
   }
 
   onFormAction(event) {
@@ -73,7 +87,6 @@ export class PWCEditableTextComponent {
         <div
           id="content"
           spellcheck="false"
-          onClick={this.focusText.bind(this)}
           style={Object.assign(this.shapeOptions, { transform: "" })}
         >
           {this.text}

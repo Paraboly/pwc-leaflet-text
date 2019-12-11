@@ -15,6 +15,7 @@ export namespace Components {
     'initialize': (form: any) => Promise<void>;
   }
   interface PwcEditableText {
+    'editable': boolean;
     'text'?: string;
     'textOptions': string | any;
   }
@@ -119,6 +120,7 @@ declare namespace LocalJSX {
     'onFormActions'?: (event: CustomEvent<any>) => void;
   }
   interface PwcEditableText {
+    'editable'?: boolean;
     'text'?: string;
     'textOptions'?: string | any;
   }
@@ -145,6 +147,7 @@ declare namespace LocalJSX {
   interface PwcTextControl {
     'geometry'?: any;
     'map'?: any;
+    'onEdit'?: (event: CustomEvent<any>) => void;
     'onSave'?: (event: CustomEvent<any>) => void;
   }
 
