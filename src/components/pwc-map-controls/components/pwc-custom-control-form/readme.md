@@ -5,13 +5,6 @@
 <!-- Auto Generated Below -->
 
 
-## Properties
-
-| Property | Attribute | Description | Type  | Default     |
-| -------- | --------- | ----------- | ----- | ----------- |
-| `form`   | `form`    |             | `any` | `undefined` |
-
-
 ## Events
 
 | Event         | Description | Type               |
@@ -21,7 +14,17 @@
 
 ## Methods
 
-### `initialize(shape: any) => Promise<void>`
+### `destroy() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `initialize(form: any) => Promise<void>`
 
 
 

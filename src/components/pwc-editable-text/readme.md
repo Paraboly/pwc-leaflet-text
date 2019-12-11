@@ -7,10 +7,11 @@
 
 ## Properties
 
-| Property | Attribute | Description | Type     | Default          |
-| -------- | --------- | ----------- | -------- | ---------------- |
-| `styles` | `styles`  |             | `any`    | `undefined`      |
-| `text`   | `text`    |             | `string` | `"Ornek Etiket"` |
+| Property      | Attribute      | Description | Type      | Default          |
+| ------------- | -------------- | ----------- | --------- | ---------------- |
+| `editable`    | `editable`     |             | `boolean` | `false`          |
+| `text`        | `text`         |             | `string`  | `"Ornek Etiket"` |
+| `textOptions` | `text-options` |             | `any`     | `undefined`      |
 
 
 ----------------------------------------------

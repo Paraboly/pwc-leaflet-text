@@ -21,16 +21,6 @@
 
 ## Methods
 
-### `cancelActiveControl() => Promise<any>`
-
-
-
-#### Returns
-
-Type: `Promise<any>`
-
-
-
 ### `getControls() => Promise<any>`
 
 
@@ -41,7 +31,7 @@ Type: `Promise<any>`
 
 
 
-### `initialize(config: { map: L.Map; controls?: {}; }) => Promise<void>`
+### `initialize(config: { map: L.Map; controls?: {}; }, geometry: any) => Promise<void>`
 
 
 

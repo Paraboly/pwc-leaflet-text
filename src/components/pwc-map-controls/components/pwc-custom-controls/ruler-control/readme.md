@@ -1,4 +1,4 @@
-# pwc-text-control
+# pwc-ruler-control
 
 
 
@@ -9,8 +9,16 @@
 
 | Property   | Attribute  | Description | Type  | Default     |
 | ---------- | ---------- | ----------- | ----- | ----------- |
+| `form`     | `form`     |             | `any` | `undefined` |
 | `geometry` | `geometry` |             | `any` | `undefined` |
 | `map`      | `map`      |             | `any` | `undefined` |
+
+
+## Events
+
+| Event  | Description | Type               |
+| ------ | ----------- | ------------------ |
+| `save` |             | `CustomEvent<any>` |
 
 
 ----------------------------------------------
