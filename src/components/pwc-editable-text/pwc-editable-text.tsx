@@ -81,7 +81,11 @@ export class PWCEditableTextComponent {
         rotatable-element
         style={{ position: "relative", transform: this.shapeOptions.transform }}
       >
-        <span rotation-point class="rotatable">
+        <span
+          rotation-point
+          class="rotatable"
+          style={{ display: this.state === STATES.EDIT ? "block" : "none" }}
+        >
           📍
         </span>
         <div
