@@ -1,7 +1,7 @@
 const PWC_MAP_CONTROLS_CONSTANT = {
   CONTROL_CONFIGS: {
-    TextControl: {
-      controlName: "TextControl",
+    PwcTextControl: {
+      controlName: "PwcTextControl",
       component: "pwc-text-control",
       params: {
         form: {
@@ -43,7 +43,7 @@ const PWC_MAP_CONTROLS_CONSTANT = {
     //   tooltipText: "Kırp"
     // }
   },
-  DEFAULT_CUSTOM_CONTROLS: ["TextControl"],
+  DEFAULT_CUSTOM_CONTROLS: ["PwcTextControl"],
   DEFAULT_CONTROL_CONFIG: {
     position: "topleft"
   }

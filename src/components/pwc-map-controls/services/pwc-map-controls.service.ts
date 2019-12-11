@@ -1,6 +1,5 @@
 import L from "leaflet";
 import PWC_MAP_CONTROLS_CONSTANT from "../pwc-map-controls.constant";
-import PWCUtils from "../../../core/utils.service";
 abstract class PWCMapControlsService {
   /**
    * @static
@@ -27,7 +26,7 @@ abstract class PWCMapControlsService {
     );
 
     const PWCMapCustomControl = L.Control.extend({
-      onAdd: map => PWCMapControlsService.generateControlButton(map, cfg)
+      onAdd: () => PWCMapControlsService.generateControlButton(controlName, cfg)
     });
 
     L.Control[controlName] = function(opts) {
@@ -40,23 +39,22 @@ abstract class PWCMapControlsService {
   /**
    * @static
    * @description Create Map Control dom element with the given configuration
-   * @param {{ tooltipText: string; icon: string; template: string; onTriggered: function;}} cfg is configuration parameters for control button
+   * @param {{ tooltipText: string; icon: string; template: string;}} cfg is configuration parameters for control button
    * @returns {HTMLElement} generated map control button
    * @memberof PWCMapControlsService
    */
   public static generateControlButton(
-    map: L.Map,
+    controlName: string,
     cfg: {
       tooltipText?: string;
       icon?: string;
       template?: string;
       position?: string;
-      onTriggered?;
     }
   ): HTMLElement {
     const controlButton = L.DomUtil.create(
       "div",
-      "leaflet-bar leaflet-control pwc-custom-control"
+      `leaflet-bar leaflet-control pwc-custom-control ${controlName}`
     );
 
     controlButton.innerHTML = `
@@ -64,35 +62,24 @@ abstract class PWCMapControlsService {
         <pwc-tooltip tooltip-alignment="right" tooltip-text="${cfg.tooltipText}" tooltip-source="${cfg.icon}"></pwc-tooltip>
       </a>`;
 
-    this.registerEventListeners(controlButton, cfg, map);
-
     return controlButton;
   }
 
   /**
    * @description Register click events for custom controls
    */
-  private static registerEventListeners(
-    controlButton: HTMLElement,
-    cfg: {
-      tooltipText?: string;
-      icon?: string;
-      template?: string;
-      onTriggered?;
-    },
-    map: L.Map
+  public static registerEventListenerForCustomControl(
+    controlName: string,
+    callback
   ) {
-    L.DomEvent.addListener(controlButton, "click", L.DomEvent.stopPropagation);
-    L.DomEvent.addListener(controlButton, "click", L.DomEvent.preventDefault);
-
-    L.DomEvent.addListener(
-      controlButton,
-      "click",
-      PWCUtils.partial(cfg.onTriggered, controlButton, map, cfg),
-      this
-    );
+    const controlButton = document.querySelector(
+      `.${controlName}`
+    ) as HTMLElement;
 
     L.DomEvent.disableClickPropagation(controlButton);
+    L.DomEvent.addListener(controlButton, "click", L.DomEvent.stopPropagation);
+    L.DomEvent.addListener(controlButton, "click", L.DomEvent.preventDefault);
+    L.DomEvent.addListener(controlButton, "click", callback, this);
   }
 
   /**
@@ -108,6 +95,12 @@ abstract class PWCMapControlsService {
     formComponent["form"] = formProps;
   }
 
+  /**
+   * @static
+   * @description Initialize PWC Control Form with given form data
+   * @param {*} form
+   * @memberof PWCMapControlsService
+   */
   public static initializeForm(form) {
     const pwcMapControls = document.querySelector("pwc-custom-control-form");
     pwcMapControls["initialize"](form);

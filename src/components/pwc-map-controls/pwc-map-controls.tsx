@@ -15,8 +15,8 @@ import "leaflet.browser.print/dist/leaflet.browser.print";
 import "leaflet-fullscreen/dist/Leaflet.fullscreen.min";
 
 import PWC_MAP_CONTROLS_CONSTANT from "./pwc-map-controls.constant";
-import PWCUtils from "../../core/utils.service";
 import PWCMap from "../pwc-map/services/pwc-map.model";
+import PWCMapControlsService from "./services/pwc-map-controls.service";
 
 enum ACTIONS {
   SAVE = "save",
@@ -72,26 +72,16 @@ export class PwcMapControls {
        */
       const controlConfig = Object.assign(
         {},
-        PWC_MAP_CONTROLS_CONSTANT.CONTROL_CONFIGS[controlName],
-        {
-          onTriggered: PWCUtils.partial(
-            this.onControlTriggered.bind(this),
-            PWC_MAP_CONTROLS_CONSTANT.CONTROL_CONFIGS[controlName]
-          )
-        }
+        PWC_MAP_CONTROLS_CONSTANT.CONTROL_CONFIGS[controlName]
       );
 
       /**
        * Create custom control and push to controlsGroup
        */
       this.controlsGroup.push(
-        this.map.controls.create(controlName, controlConfig)
+        PWCMapControlsService.createControl(controlName, controlConfig)
       );
     });
-  }
-
-  private onControlTriggered(controlConfig) {
-    console.log(controlConfig);
   }
 
   /**

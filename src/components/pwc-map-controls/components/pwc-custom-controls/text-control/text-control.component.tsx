@@ -3,10 +3,22 @@ import PWCCustomControl from "../pwc-custom-control.interface";
 import L from "leaflet";
 import { PWCMapMarkerFactory } from "../../../../pwc-map-marker/services/pwc-map-marker.factory";
 import PWCMapControlsService from "../../../services/pwc-map-controls.service";
-import PWCMapMarker from "../../../../pwc-map-marker/services/pwc-map-marker.model";
+import PWCCustomControlForm from "../../pwc-custom-control-form/pwc-custom-control-form.model";
+
+const defaultTextForm = {
+  name: "ÖrnekEtiket",
+  shapeProps: {
+    fontSize: "12px",
+    backgroundColor: "#dddddd"
+  },
+  pwcProps: {
+    type: "PwcTextControl"
+  }
+};
 
 enum STATES {
   IDLE,
+  EDIT,
   POINT_DETECTION
 }
 @Component({
@@ -14,6 +26,7 @@ enum STATES {
   styleUrls: []
 })
 export class PWCTextControl implements PWCCustomControl {
+  private customControlName = "PwcTextControl";
   private activeShape;
   private shapeLayer: L.GeoJSON;
   @Event() save: EventEmitter;
@@ -23,15 +36,12 @@ export class PWCTextControl implements PWCCustomControl {
 
   componentDidLoad() {
     PWCMapControlsService.registerFormListener(this.onFormAction);
+    PWCMapControlsService.registerEventListenerForCustomControl(
+      this.customControlName,
+      this.onControlTriggered.bind(this)
+    );
 
     this.renderShapes();
-
-    //TODO: InitializeForm call will be attached to edit and create actions
-    if (this.geometry[0].properties) {
-      PWCMapControlsService.initializeForm(this.geometry[0].properties);
-    }
-
-    //this.detectPoint();
   }
 
   componentDidUnload() {
@@ -41,17 +51,17 @@ export class PWCTextControl implements PWCCustomControl {
   renderShapes() {
     this.shapeLayer = new L.GeoJSON(this.geometry, {
       pointToLayer: (feature, latlng) => {
-        return new PWCMapMarker({
-          latlng,
-          template: `<pwc-editable-text text="${
-            feature.properties.name
-          }" text-options=${JSON.stringify(feature.properties)} >`,
-          options: { draggable: false }
-        }).instance;
+        return this._generateTextMarker(latlng, feature.properties).instance;
       }
     });
 
     this.map.instance.addLayer(this.shapeLayer);
+  }
+
+  onControlTriggered() {
+    this.state = STATES.POINT_DETECTION;
+
+    this.detectPoint();
   }
 
   onFormAction(event) {
@@ -67,6 +77,8 @@ export class PWCTextControl implements PWCCustomControl {
     this.map.instance.doubleClickZoom.disable();
 
     this.map.instance.once("click", event => {
+      const form = new PWCCustomControlForm(defaultTextForm);
+
       this.map.instance.doubleClickZoom.enable();
 
       L.DomUtil.removeClass(
@@ -74,11 +86,7 @@ export class PWCTextControl implements PWCCustomControl {
         "crosshair-cursor-enabled"
       );
 
-      this.activeShape = PWCMapMarkerFactory.getOne({
-        latlng: event["latlng"],
-        template: "<pwc-editable-text/>",
-        options: { draggable: true }
-      });
+      this.activeShape = this._generateTextMarker(event.latlng, form);
 
       this.activeShape.instance.on("dragstart", () => {
         this.map.instance.dragging.disable();
@@ -89,6 +97,22 @@ export class PWCTextControl implements PWCCustomControl {
       });
 
       this.activeShape.instance.addTo(this.map.instance);
+
+      PWCMapControlsService.initializeForm(form);
+
+      this.state = STATES.EDIT;
+    });
+  }
+
+  _generateTextMarker(latlng, properties) {
+    const template = `<pwc-editable-text text="${
+      properties.name
+    }" text-options=${JSON.stringify(properties)} >`;
+
+    return PWCMapMarkerFactory.getOne({
+      latlng: latlng,
+      template,
+      options: { draggable: true }
     });
   }
 
@@ -96,9 +120,7 @@ export class PWCTextControl implements PWCCustomControl {
     return (
       this.state === STATES.POINT_DETECTION && (
         <div>
-          <div class="guide">
-            📍 Etiket koymak istediginiz noktaya cift tiklayin
-          </div>
+          <div class="guide">📍 Etiket koymak istediginiz noktaya tıklayın</div>
         </div>
       )
     );

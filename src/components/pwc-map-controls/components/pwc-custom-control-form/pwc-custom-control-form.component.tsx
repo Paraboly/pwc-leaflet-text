@@ -37,18 +37,6 @@ export class PWCCustomControlFormComponent {
 
   componentWillLoad() {}
 
-  setShapeStyle() {
-    // if (this.shape.instance._icon.firstElementChild) {
-    //   this.shape.instance._icon.firstElementChild["styles"] = {
-    //     color: this.fontColor,
-    //     fontSize: this.fontSize + "px",
-    //     width: this.width + "px",
-    //     padding: this.padding + "px",
-    //     backgroundColor: this.bgColor
-    //   };
-    // }
-  }
-
   registerSliderEventListeners(callback) {
     const sliders = [
       { id: "slider-font-size", model: "fontSize" },
@@ -124,7 +112,7 @@ export class PWCCustomControlFormComponent {
                   max="40"
                   max-markers="20"
                   step="1"
-                  value={this.form.shapeProps.fontSize}
+                  value={this.form.shapeProps.fontSize || 12}
                 ></paper-slider>
               </div>
               <div class="form-group">
