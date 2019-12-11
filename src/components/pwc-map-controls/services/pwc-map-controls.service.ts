@@ -1,7 +1,6 @@
 import L from "leaflet";
 import PWC_MAP_CONTROLS_CONSTANT from "../pwc-map-controls.constant";
 import PWCUtils from "../../../core/utils.service";
-import PWCMapMarker from "../../pwc-map-marker/services/pwc-map-marker.model";
 abstract class PWCMapControlsService {
   /**
    * @static
@@ -109,9 +108,9 @@ abstract class PWCMapControlsService {
     formComponent["form"] = formProps;
   }
 
-  public static initializeForm(form, shape: PWCMapMarker) {
+  public static initializeForm(form) {
     const pwcMapControls = document.querySelector("pwc-custom-control-form");
-    pwcMapControls["initialize"](form, shape);
+    pwcMapControls["initialize"](form);
   }
 
   public static registerFormListener(callback) {

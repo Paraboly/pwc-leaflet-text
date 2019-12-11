@@ -11,7 +11,7 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 export namespace Components {
   interface PwcCustomControlForm {
-    'initialize': (form: any, shape: any) => Promise<void>;
+    'initialize': (form: any) => Promise<void>;
   }
   interface PwcEditableText {
     'text'?: string;

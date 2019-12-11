@@ -22,10 +22,15 @@ export class PWCTextControl implements PWCCustomControl {
   @Prop() geometry;
 
   componentDidLoad() {
+    PWCMapControlsService.registerFormListener(this.onFormAction);
+
     this.renderShapes();
 
-    PWCMapControlsService.initializeForm({}, this.activeShape);
-    PWCMapControlsService.registerFormListener(this.onFormAction);
+    //TODO: InitializeForm call will be attached to edit and create actions
+    if (this.geometry[0].properties) {
+      PWCMapControlsService.initializeForm(this.geometry[0].properties);
+    }
+
     //this.detectPoint();
   }
 

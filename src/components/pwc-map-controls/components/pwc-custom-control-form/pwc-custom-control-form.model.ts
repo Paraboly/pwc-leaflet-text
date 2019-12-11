@@ -1,25 +1,39 @@
 class PWCCustomControlForm {
-  title: string;
-  type = "label";
-  created?: string | Date;
-  updated?: string | Date;
-  shapeProps?: {} = {};
-  geometry: L.GeoJSON;
+  name: string;
+  shapeProps?: {
+    width?: string;
+    height?: string;
+    color?: string;
+    backgroundColor?: string;
+    padding?: string;
+    margin?: string;
+    transform?: string;
+    fontSize?: string;
+  };
+  pwcProps: {
+    type: string;
+    created?: string;
+    updated?: string;
+  };
 
   constructor(form: any) {
-    this.title = form.title;
-    this.created = this.created || new Date().toISOString();
-    this.updated = form.updated ? new Date(form.updated) : form.updated;
+    this.forClient(form);
+  }
 
-    Object.keys(form).map(key => {
-      if (key !== "title") this.shapeProps[key] = form[key];
-    });
+  private forClient(form): void {
+    Object.assign(this, form);
+
+    this.shapeProps = this.shapeProps || {};
+    this.pwcProps = this.pwcProps || {
+      type: "PWCEditableText",
+      created: new Date().toISOString()
+    };
   }
 
   public forServer(): PWCCustomControlForm {
     const forServer = Object.assign({}, this);
-    forServer.updated = new Date().toISOString();
-    delete forServer.title;
+    forServer.pwcProps.updated = new Date().toISOString();
+
     return forServer;
   }
 }

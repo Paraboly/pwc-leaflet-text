@@ -29,29 +29,23 @@ enum STATES {
   shadow: true
 })
 export class PWCCustomControlFormComponent {
-  private shape: any;
   private form: PWCCustomControlForm;
   @Element() elem: HTMLElement;
   @Event() formActions: EventEmitter;
   @State() formState: STATES = STATES.UNINITIALIZED;
-  @State() fontSize;
-  @State() width;
-  @State() padding;
-  @State() fontColor;
-  @State() bgColor;
 
   componentWillLoad() {}
 
   setShapeStyle() {
-    if (this.shape.instance._icon.firstElementChild) {
-      this.shape.instance._icon.firstElementChild["styles"] = {
-        color: this.fontColor,
-        fontSize: this.fontSize + "px",
-        width: this.width + "px",
-        padding: this.padding + "px",
-        backgroundColor: this.bgColor
-      };
-    }
+    // if (this.shape.instance._icon.firstElementChild) {
+    //   this.shape.instance._icon.firstElementChild["styles"] = {
+    //     color: this.fontColor,
+    //     fontSize: this.fontSize + "px",
+    //     width: this.width + "px",
+    //     padding: this.padding + "px",
+    //     backgroundColor: this.bgColor
+    //   };
+    // }
   }
 
   registerSliderEventListeners(callback) {
@@ -74,21 +68,21 @@ export class PWCCustomControlFormComponent {
   onFormValuesChanged(model, e) {
     e.preventDefault();
     this[model] = e.target.value;
-    this.setShapeStyle();
+    //this.setShapeStyle();
   }
 
   onSubmit(e) {
     e.preventDefault();
-    const geometry = this.shape.instance.toGeoJSON();
-    geometry.properties = {
-      color: this.fontColor,
-      fontSize: this.fontSize + "px",
-      width: this.width + "px",
-      padding: this.padding + "px",
-      backgroundColor: this.bgColor
-    };
+    // const geometry = this.shape.instance.toGeoJSON();
+    // geometry.properties = {
+    //   color: this.fontColor,
+    //   fontSize: this.fontSize + "px",
+    //   width: this.width + "px",
+    //   padding: this.padding + "px",
+    //   backgroundColor: this.bgColor
+    // };
 
-    this.form.geometry = geometry;
+    // this.form.geometry = geometry;
 
     this.formActions.emit({
       action: ACTIONS.SAVE,
@@ -107,16 +101,10 @@ export class PWCCustomControlFormComponent {
   }
 
   @Method()
-  async initialize(form, shape: any) {
+  async initialize(form: any) {
     this.form = new PWCCustomControlForm(form);
-
-    Object.keys(this.form.shapeProps).map(
-      key => (this[key] = this.form.shapeProps[key])
-    );
-
     this.formState = STATES.INITIALIZED;
-    this.shape = shape;
-
+    console.log(this.form);
     setTimeout(() => {
       this.registerSliderEventListeners(this.onFormValuesChanged.bind(this));
       //this.setShapeStyle();
@@ -124,10 +112,14 @@ export class PWCCustomControlFormComponent {
   }
 
   render() {
+    console.log("control form: ", this.form);
     return (
       this.formState === STATES.INITIALIZED && (
         <pwc-ibox>
-          <pwc-ibox-title>{this.form.title}</pwc-ibox-title>
+          <pwc-ibox-title>
+            <strong>🔎 Detaylar: </strong>
+            {this.form.name}
+          </pwc-ibox-title>
           <pwc-ibox-content>
             <form>
               <div class="form-group">
@@ -139,7 +131,7 @@ export class PWCCustomControlFormComponent {
                   max="40"
                   max-markers="20"
                   step="1"
-                  value={this.fontSize}
+                  value={this.form.shapeProps.fontSize}
                 ></paper-slider>
               </div>
               <div class="form-group">
@@ -151,7 +143,7 @@ export class PWCCustomControlFormComponent {
                   max="400"
                   max-markers="10"
                   step="4"
-                  value={this.width}
+                  value={this.form.shapeProps.width}
                 ></paper-slider>
               </div>
               <div class="form-group">
@@ -163,7 +155,7 @@ export class PWCCustomControlFormComponent {
                   max="25"
                   max-markers="10"
                   step="5"
-                  value={this.padding}
+                  value={this.form.shapeProps.padding}
                 ></paper-slider>
               </div>
               <div class="form-group">
@@ -172,7 +164,7 @@ export class PWCCustomControlFormComponent {
                   type="color"
                   name="font-color-picker"
                   id="font-color-picker"
-                  value={this.fontColor}
+                  value={this.form.shapeProps.color}
                   onChange={PWCUtils.partial(
                     this.onFormValuesChanged.bind(this),
                     "fontColor"
@@ -185,7 +177,7 @@ export class PWCCustomControlFormComponent {
                   type="color"
                   name="bg-color-picker"
                   id="bg-color-picker"
-                  value={this.bgColor}
+                  value={this.form.shapeProps.backgroundColor}
                   onChange={PWCUtils.partial(
                     this.onFormValuesChanged.bind(this),
                     "bgColor"
