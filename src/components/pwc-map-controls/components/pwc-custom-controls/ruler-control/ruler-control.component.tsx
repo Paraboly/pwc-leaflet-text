@@ -1,4 +1,12 @@
-import { Component, Prop, State, h, Event, EventEmitter, Method } from "@stencil/core";
+import {
+  Component,
+  Prop,
+  State,
+  h,
+  Event,
+  EventEmitter,
+  Method
+} from "@stencil/core";
 import PWCCustomControl from "../pwc-custom-control.interface";
 import L from "leaflet";
 import { PWCMapMarkerFactory } from "../../../../pwc-map-marker/services/pwc-map-marker.factory";
@@ -33,7 +41,6 @@ export class PWCRulerControl implements PWCCustomControl {
   @Prop() form;
   @Prop() geometry;
 
-
   constructor() {
     this.viaPoints = [];
     this.routePoints = [];
@@ -46,18 +53,15 @@ export class PWCRulerControl implements PWCCustomControl {
       this.onControlTriggered.bind(this)
     );
 
-
     this.renderShapes();
   }
 
   renderShapes() {
     this.shapeLayer = new L.GeoJSON(this.geometry, {
-      onEachFeature: function (_feature, layer) {
-      }
+      //onEachFeature: function (_feature, layer) {}
     });
     this.map.instance.addLayer(this.shapeLayer);
-  };
-
+  }
 
   onControlTriggered() {
     this.markerLayer = L.layerGroup();
@@ -89,7 +93,6 @@ export class PWCRulerControl implements PWCCustomControl {
     }
   }
 
-
   onMarkerClick(event) {
     if (
       this.lastMarker.settings.latlng === event.latlng &&
@@ -99,10 +102,9 @@ export class PWCRulerControl implements PWCCustomControl {
     }
   }
 
-  onDrag() { }
+  onDrag() {}
 
   onStop() {
-
     PWCMapRoutingService.getRoute(this.routePoints).then(response => {
       this.route = response;
 
@@ -115,7 +117,7 @@ export class PWCRulerControl implements PWCCustomControl {
         }
       };
       this.activeShape = new L.GeoJSON(this.route.geometry, {
-        onEachFeature: function (_feature, layer) {
+        onEachFeature: function(_feature, layer) {
           layer.bindTooltip(response.summary.distance.toString()).openTooltip();
         }
       });
@@ -137,7 +139,7 @@ export class PWCRulerControl implements PWCCustomControl {
 
   removePointsOnMap(oldViaPoints) {
     const ctrl = this;
-    this.map.instance.eachLayer(function (layer) {
+    this.map.instance.eachLayer(function(layer) {
       if (oldViaPoints.includes(layer)) {
         ctrl.map.instance.removeLayer(layer);
       }
@@ -164,7 +166,7 @@ export class PWCRulerControl implements PWCCustomControl {
       });
 
       const ctrl = this;
-      this.lastMarker.instance.on("click", function (e) {
+      this.lastMarker.instance.on("click", function(e) {
         e.originalEvent.stopPropagation();
         ctrl.onMarkerClick(e);
       });
@@ -180,7 +182,7 @@ export class PWCRulerControl implements PWCCustomControl {
 
   _drawPolyline(feature) {
     new L.GeoJSON(feature.geometry, {
-      onEachFeature: function (_feature, layer) {
+      onEachFeature: function(_feature, layer) {
         layer.bindTooltip(feature.summary.distance.toString()).openTooltip();
       }
     });
