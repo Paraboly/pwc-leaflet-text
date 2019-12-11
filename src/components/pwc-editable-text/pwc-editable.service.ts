@@ -59,13 +59,11 @@ abstract class PWCEditableService {
   }
 
   public static moveElementToCursorPosition(rotatingElement, rotationPoint) {
-    rotatingElement.setAttribute(
-      "style",
-      ` left: ${rotatingElement["offsetWidth"] / 2 -
-        rotationPoint["offsetWidth"]}px;
-        top: ${-(rotatingElement["offsetHeight"] / 2) -
-          rotationPoint["offsetHeight"]}px;`
-    );
+    rotatingElement.style.left = `${rotatingElement["offsetWidth"] / 2 -
+      rotationPoint["offsetWidth"]}px`;
+
+    rotatingElement.style.top = `${-(rotatingElement["offsetHeight"] / 2) -
+      rotationPoint["offsetHeight"]}px;`;
   }
 
   public static placeCaretAtEnd(el) {

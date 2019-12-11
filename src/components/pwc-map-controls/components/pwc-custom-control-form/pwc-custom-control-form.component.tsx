@@ -93,6 +93,12 @@ export class PWCCustomControlFormComponent {
     this.registerSliderEventListeners(this.onFormValuesChanged.bind(this));
   }
 
+  @Method()
+  async destroy() {
+    this.form = null;
+    this.formState = STATES.UNINITIALIZED;
+  }
+
   render() {
     return (
       this.formState === STATES.INITIALIZED && (

@@ -1,5 +1,6 @@
 import PWCEditableService from "./pwc-editable.service";
-import { Component, Prop, h, Element, State, Event } from "@stencil/core";
+import { Component, Prop, h, Element, State } from "@stencil/core";
+import PWCMapControlsService from "../pwc-map-controls/services/pwc-map-controls.service";
 
 enum STATES {
   UNINITIALIZED,
@@ -13,19 +14,15 @@ enum STATES {
 })
 export class PWCEditableTextComponent {
   @Element() element: HTMLElement;
+  @State() shapeOptions;
   @State() state: STATES = STATES.UNINITIALIZED;
   @Prop() text?: string = "Ornek Etiket";
-  @Prop() textOptions: string;
-  @Event()
-  change;
-
-  handleChange(event) {
-    this.text = event.target.value;
-  }
+  @Prop() textOptions: string | any;
 
   componentWillLoad() {
     this.textOptions =
       typeof this.textOptions === "string" ? JSON.parse(this.textOptions) : {};
+    this.shapeOptions = this.textOptions["shapeProps"];
   }
 
   componentDidLoad() {
@@ -38,6 +35,7 @@ export class PWCEditableTextComponent {
     );
 
     PWCEditableService.registerRotateAbility(rotatableElement, rotationPoint);
+    PWCMapControlsService.registerFormListener(this.onFormAction.bind(this));
   }
 
   focusText(e) {
@@ -52,9 +50,23 @@ export class PWCEditableTextComponent {
     });
   }
 
+  onFormAction(event) {
+    if (
+      this.textOptions.pwcProps.created === event.detail.data.pwcProps.created
+    ) {
+      this.shapeOptions = {
+        ...this.shapeOptions,
+        ...event.detail.data.shapeProps
+      };
+    }
+  }
+
   render() {
     return (
-      <div rotatable-element style={{ position: "relative" }}>
+      <div
+        rotatable-element
+        style={{ position: "relative", transform: this.shapeOptions.transform }}
+      >
         <span rotation-point class="rotatable">
           📍
         </span>
@@ -62,7 +74,7 @@ export class PWCEditableTextComponent {
           id="content"
           spellcheck="false"
           onClick={this.focusText.bind(this)}
-          style={this.textOptions as any}
+          style={Object.assign(this.shapeOptions, { transform: "" })}
         >
           {this.text}
         </div>

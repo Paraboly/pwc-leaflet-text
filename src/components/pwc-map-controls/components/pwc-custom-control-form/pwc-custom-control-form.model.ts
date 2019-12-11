@@ -24,10 +24,13 @@ class PWCCustomControlForm {
     Object.assign(this, form);
 
     this.shapeProps = this.shapeProps || {};
-    this.pwcProps = this.pwcProps || {
-      type: "PWCEditableText",
-      created: new Date().toISOString()
-    };
+    this.pwcProps = Object.assign(
+      {
+        type: "PwcTextControl",
+        created: new Date().toISOString()
+      },
+      this.pwcProps
+    );
   }
 
   public forServer(): PWCCustomControlForm {

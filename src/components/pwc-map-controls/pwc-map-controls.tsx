@@ -103,7 +103,8 @@ export class PwcMapControls {
   }
 
   onAction(action: ACTIONS = ACTIONS.CANCELED, event = { detail: {} }) {
-    this.actions.emit({ action, data: event.detail });
+    if (action === "save" || action === "deleted")
+      this.actions.emit({ action, data: event.detail });
   }
 
   /**

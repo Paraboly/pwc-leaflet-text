@@ -106,6 +106,17 @@ abstract class PWCMapControlsService {
     pwcMapControls["initialize"](form);
   }
 
+  /**
+   * @static
+   * @description Initialize PWC Control Form with given form data
+   * @param {*} form
+   * @memberof PWCMapControlsService
+   */
+  public static destroyForm() {
+    const pwcMapControls = document.querySelector("pwc-custom-control-form");
+    pwcMapControls["destroy"]();
+  }
+
   public static registerFormListener(callback) {
     const customForm = document.querySelector("pwc-custom-control-form");
     customForm.addEventListener("formActions", callback);

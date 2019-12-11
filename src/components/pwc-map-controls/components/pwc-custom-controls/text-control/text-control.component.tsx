@@ -35,7 +35,7 @@ export class PWCTextControl implements PWCCustomControl {
   @Prop() geometry;
 
   componentDidLoad() {
-    PWCMapControlsService.registerFormListener(this.onFormAction);
+    PWCMapControlsService.registerFormListener(this.onFormAction.bind(this));
     PWCMapControlsService.registerEventListenerForCustomControl(
       this.customControlName,
       this.onControlTriggered.bind(this)
@@ -65,7 +65,7 @@ export class PWCTextControl implements PWCCustomControl {
   }
 
   onFormAction(event) {
-    console.log(event.detail);
+    if (event.detail.action === "canceled") this.goIdle();
   }
 
   detectPoint() {
@@ -102,6 +102,12 @@ export class PWCTextControl implements PWCCustomControl {
 
       this.state = STATES.EDIT;
     });
+  }
+
+  goIdle() {
+    this.map.instance.removeLayer(this.activeShape.instance);
+    this.activeShape = null;
+    PWCMapControlsService.destroyForm();
   }
 
   _generateTextMarker(latlng, properties) {
