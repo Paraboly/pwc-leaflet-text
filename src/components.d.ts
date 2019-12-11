@@ -147,8 +147,6 @@ declare namespace LocalJSX {
   interface PwcTextControl {
     'geometry'?: any;
     'map'?: any;
-    'onEdit'?: (event: CustomEvent<any>) => void;
-    'onSave'?: (event: CustomEvent<any>) => void;
   }
 
   interface IntrinsicElements {

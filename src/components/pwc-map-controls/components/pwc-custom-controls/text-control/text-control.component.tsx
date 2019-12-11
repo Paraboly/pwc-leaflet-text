@@ -1,10 +1,9 @@
-import { Component, Prop, State, h, Event, EventEmitter } from "@stencil/core";
+import { Component, Prop, State, h } from "@stencil/core";
 import PWCCustomControl from "../pwc-custom-control.interface";
 import L from "leaflet";
 import { PWCMapMarkerFactory } from "../../../../pwc-map-marker/services/pwc-map-marker.factory";
 import PWCMapControlsService from "../../../services/pwc-map-controls.service";
 import PWCCustomControlForm from "../../pwc-custom-control-form/pwc-custom-control-form.model";
-import PWCUtils from "../../../../../core/utils.service";
 
 enum STATES {
   IDLE,
@@ -20,8 +19,6 @@ export class PWCTextControl implements PWCCustomControl {
   private activeShapeBackup;
   private activeShape;
   private shapeLayer: L.GeoJSON;
-  @Event() edit: EventEmitter;
-  @Event() save: EventEmitter;
   @State() state: STATES = STATES.IDLE;
   @Prop() map;
   @Prop() geometry;
@@ -82,8 +79,7 @@ export class PWCTextControl implements PWCCustomControl {
     this.map.instance.doubleClickZoom.disable();
 
     this.map.instance.once("click", e => {
-      if (this.state === STATES.POINT_DETECTION)
-        this.editShape(defaultTextForm, e);
+      this.editShape(defaultTextForm, e);
     });
   }
 

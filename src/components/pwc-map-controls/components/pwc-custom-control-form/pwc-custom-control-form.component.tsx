@@ -174,6 +174,13 @@ export class PWCCustomControlFormComponent {
             </form>
           </pwc-ibox-content>
           <pwc-ibox-footer>
+            {this.form.pwcProps.updated && (
+              <input
+                type="button"
+                value="Sil"
+                onClick={this.onDelete.bind(this)}
+              />
+            )}
             <input
               type="button"
               value="Iptal"
